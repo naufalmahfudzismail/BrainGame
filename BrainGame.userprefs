@@ -1,0 +1,16 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Ball.cs">
+    <Files>
+      <File FileName="Assets\Scripts\CreateGames4.cs" Line="40" Column="2" />
+      <File FileName="Assets\Scripts\Ball.cs" Line="10" Column="26" />
+      <File FileName="Assets\Scripts\FlexibleScript\FlexibleManager.cs" Line="70" Column="42" />
+      <File FileName="..\Ministry of Marine\Assets\Scripts\Narration1.cs" Line="1" Column="1" />
+      <File FileName="..\..\..\Downloads\Downloads\Match 3 Game Starter\Assets\Match 3 Starter\Scripts\Board and Grid\BoardManager.cs" Line="49" Column="44" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
