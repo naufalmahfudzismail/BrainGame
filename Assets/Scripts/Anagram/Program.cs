@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
-    class Shuffle
+    /*class Shuffle
     {
         static System.Random rnd = new System.Random(); //add random number
 
@@ -101,5 +101,5 @@ namespace ConsoleApplication1
 
             System.Console.ReadKey();
         }
-    }
+    }*/
 }
