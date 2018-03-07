@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/game4.unity
+- path: Assets/Scenes/Anagram.unity
   isLoaded: 1
   isActive: 1

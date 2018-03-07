@@ -12,7 +12,6 @@ public class Anagram : MonoBehaviour {
 
 	public Text[] txtObj;
 
-	private List<char> alphabet		   =  new List
 	private List<char> kar			   =  new List<char> ();
 	private List<char> distract        =  new List<char> (){'!', '@', '#', '$', '%', '&', '?', '<', '>', '{', '}', ']', '[', '|', '/', '~', '+', '^'};
 	private List<char> desiredDistract =  new List<char> ();
@@ -67,7 +66,6 @@ public class Anagram : MonoBehaviour {
 		Distraction ();
 		int sumChar = (int)kar.Count;
 		int sumDist = (int)desiredDistract.Count;
-		int GenerLength = sumChar + sumDist;
 
 		for (int i = 0; i < sumChar; i++) {
 			Generate.Add (kar [i]);

@@ -113,6 +113,60 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &71317372 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114856576724378292, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &374152803 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114705375099545004, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &559075024 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114197576900357026, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &571816292 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114612910427657862, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &715589174 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114554911434888682, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &937301196 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114298028297902040, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &952991928 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114989742681821988, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &1069249139 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114073112470483628, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &1287568116 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114927872509318612, guid: a8fd15244e751a443b75351a3dbc28a4,
+    type: 2}
+  m_PrefabInternal: {fileID: 2027987029}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1319107786
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +266,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soal: nabusy
   desiredLength: 5
+  txtObj:
+  - {fileID: 1069249139}
+  - {fileID: 71317372}
+  - {fileID: 937301196}
+  - {fileID: 559075024}
+  - {fileID: 1287568116}
+  - {fileID: 952991928}
+  - {fileID: 374152803}
+  - {fileID: 715589174}
+  - {fileID: 571816292}
 --- !u!1001 &2027987029
 Prefab:
   m_ObjectHideFlags: 0
