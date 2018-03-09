@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\Ball.cs" />
      <Compile Include="Assets\Scripts\BoardManager.cs" />
      <Compile Include="Assets\Scripts\CreateGames4.cs" />
+     <Compile Include="Assets\Scripts\FlexibleScript\Flexible.cs" />
      <Compile Include="Assets\Scripts\FlexibleScript\FlexibleManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
