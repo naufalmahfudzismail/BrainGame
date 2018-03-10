@@ -10,20 +10,28 @@ public class Flexible : MonoBehaviour {
 
 	public int Jsoal;
 
+    public GameObject CharButton;
+    public GameObject PostButton;
+
 	private int tSameChar;
 	private int tSameFloor;
-	private int tGetChar;
-	private int tGetFloor;
+    private int tGetChar;
+    private int tGetFloor;
+
 
 	//private double CharPercentage = (tGetChar / tSameChar) * 100;
 	//private double FloorPercentage = (tGetFloor / tSameChar) * 100;
 
 
 
-	private bool isMatched;
-	private bool isWrong;
+	private bool CharisMatched = false;
+	private bool FloorisMatched = false;
 
 	public Text[] floor = new Text[9];
+
+    public Text charScore;
+    public Text postScore;
+
 	private int totalC;
 
 	private string alphabet = "$%#@!*abcdefghijklmnopqrstuvwxyz1234567890?;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
@@ -46,12 +54,15 @@ public class Flexible : MonoBehaviour {
 
 		GatherChar ();
 		RandomingPosition ();
-		StartCoroutine ("setTask");
+		StartCoroutine ("SetTask");
 		CheckDouble ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+        charScore.text = tGetChar.ToString();
+        postScore.text = tGetFloor.ToString();
 		
 	}
 
@@ -205,7 +216,7 @@ public class Flexible : MonoBehaviour {
 	}
 
 
-	IEnumerator setTask()
+	IEnumerator SetTask()
 	{
 		int JtS = Jsoal + (Jsoal / 2);
 		
@@ -213,9 +224,29 @@ public class Flexible : MonoBehaviour {
 
 			tFl [i].text = finalChar [i].ToString ();
 
-			yield return new WaitForSeconds (3f);
+			if (i > 0) {
+				if (finalChar [i] == finalChar [i - 1]) {
+
+					CharisMatched = true;
+
+				}
+				if (tFl [i] == tFl [i - 1]) {
+
+					FloorisMatched = true;
+
+				} 
+			}
+
+			yield return new WaitForSeconds (2f);
+
+			CharisMatched  = false;
+			FloorisMatched = false;
 
 			tFl [i].text = "";
+
+            CharButton.SetActive(true);
+            PostButton.SetActive(true);
+
 		}
 	}
 
@@ -250,6 +281,28 @@ public class Flexible : MonoBehaviour {
 		}
 			
 	}
+
+	public void ClickHuruf()
+	{
+		if (CharisMatched) {
+
+			tGetChar = tGetChar + 1;
+		}
+
+        CharButton.SetActive(false);
+
+	}
+	public void ClickPosisi()
+	{
+		if (FloorisMatched) {
+
+			tGetFloor = tGetFloor + 1;
+		}
+
+        PostButton.SetActive(false);
+
+	}
+		
 
 
 }

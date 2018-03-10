@@ -8,8 +8,8 @@
       <File FileName="..\Ministry of Marine\Assets\Scripts\Narration1.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Anagram\Program.cs" Line="1" Column="1" />
       <File FileName="..\..\..\Downloads\Downloads\Match 3 Game Starter\Assets\Match 3 Starter\Scripts\Board and Grid\BoardManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Anagram\Anagram.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\FlexibleScript\Flexible.cs" Line="16" Column="2" />
+      <File FileName="Assets\Scripts\Anagram\Anagram.cs" Line="97" Column="3" />
+      <File FileName="Assets\Scripts\FlexibleScript\Flexible.cs" Line="291" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
