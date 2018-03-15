@@ -51,13 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Anagram\Anagram.cs" />
-     <Compile Include="Assets\Scripts\Anagram\Program.cs" />
-     <Compile Include="Assets\Scripts\Ball.cs" />
-     <Compile Include="Assets\Scripts\BoardManager.cs" />
-     <Compile Include="Assets\Scripts\CreateGames4.cs" />
+     <Compile Include="Assets\Scripts\AnagramScript\Anagram.cs" />
      <Compile Include="Assets\Scripts\FlexibleScript\Flexible.cs" />
-     <Compile Include="Assets\Scripts\FlexibleScript\FlexibleManager.cs" />
+     <Compile Include="Assets\Scripts\GlobalData.cs" />
+     <Compile Include="Assets\Scripts\PatternScript\Ball.cs" />
+     <Compile Include="Assets\Scripts\PatternScript\PatternMatch.cs" />
  <Reference Include="Vuforia.UnityExtensions.Editor">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Editor/Vuforia.UnityExtensions.Editor.dll</HintPath>
  </Reference>
@@ -135,6 +133,9 @@
  </Reference>
  <Reference Include="UnityEditor.WindowsStandalone.Extensions">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
+ <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>C:/Users/USER/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll</HintPath>

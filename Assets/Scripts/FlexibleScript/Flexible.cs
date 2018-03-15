@@ -18,17 +18,16 @@ public class Flexible : MonoBehaviour {
     private int tGetChar;
     private int tGetFloor;
 
+	private int Repetition = 5;
+
 
 	//private double CharPercentage = (tGetChar / tSameChar) * 100;
 	//private double FloorPercentage = (tGetFloor / tSameChar) * 100;
-
-
 
 	private bool CharisMatched = false;
 	private bool FloorisMatched = false;
 
 	public Text[] floor = new Text[9];
-
     public Text charScore;
     public Text postScore;
 
@@ -172,6 +171,7 @@ public class Flexible : MonoBehaviour {
 			temp = floor [random];
 			floor [random] = floor [i];
 			floor [i] = temp;
+
 		} // shuffle floor
 
 		for (int i = 0; i < Jsoal; i++) {
@@ -302,7 +302,13 @@ public class Flexible : MonoBehaviour {
         PostButton.SetActive(false);
 
 	}
-		
 
+	/*
+	 * WHAT TO DO NOW:
+	 * REPLAY THE SCENE ABOUT 5 TIMES
+	 * TAMPUNG SCORE TIAP REPLAY DALAM BENTUK STATIS
+	 * BUILD 2 SCENE GAMEPLAY, SCOREBOARD
+	*/
+		
 
 }
