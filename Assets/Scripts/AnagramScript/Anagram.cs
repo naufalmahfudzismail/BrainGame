@@ -5,21 +5,6 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public static class StringExtensions
-{
-	public static bool ContainsWord(this string word, string otherword)
-	{
-		int currentIndex = 0;
-
-		foreach(var character in otherword)
-		{
-			if ((currentIndex = word.IndexOf(character, currentIndex)) == -1)
-				return false;
-		}
-
-		return true;
-	}
-}
 
 public class Anagram : MonoBehaviour {
 
@@ -27,6 +12,7 @@ public class Anagram : MonoBehaviour {
 	static System.Random rand =  new System.Random();
 
 	private string soal;
+    private string tipeSoal;
 
 	private int LifePoint = 5;
 
@@ -41,7 +27,8 @@ public class Anagram : MonoBehaviour {
 	public GameObject canvas1;
 	public GameObject canvas2;
 	public GameObject ReplayButton;
-    public GameObject txtSentence;
+    public GameObject TxtSentence;
+    public GameObject SendButton;
     
 
 	public Text[] txtObj;
@@ -52,9 +39,9 @@ public class Anagram : MonoBehaviour {
 	public InputField txtField;
     public InputField txtSentences;
 
-	private string[] itemsData;
+	private string[] kamus;
+    private string[] kategori;
 
-	private List<string> kamus 		   =  new List<string>();
 	private List<char> kar			   =  new List<char> ();
 	private List<char> distract        =  new List<char> (){'!', '@', '#', '$', '%', '&', '?', '<', '>', '{', '}', ']', '[', '|', '/', '~', '+', '^'};
 	private List<char> desiredDistract =  new List<char> ();
@@ -68,19 +55,18 @@ public class Anagram : MonoBehaviour {
 	IEnumerator Start () {
 		
 		WWW items = new WWW("http://localhost/BrainGameDB/items.php");
+        WWW itemsTheme = new WWW("http://localhost/BrainGameDB/itemsTheme.php");
 
-		yield return items;
+        yield return items;
+        yield return itemsTheme;
 
-		string itemsString = items.text;
+        string itemsString = items.text;
+        string itemsThemeString = itemsTheme.text;
 
-		itemsData = itemsString.Split('|');
+        kamus = itemsString.Split('|');
+        kategori = itemsThemeString.Split('|');
 
-		for (int i = 0; i < itemsData.Length; i++) {
-
-			kamus.Add (itemsData [i]);
-		}
-
-		print (kamus.Count);
+		print (kamus.Length);
 
 		GetSoal(kamus);
 
@@ -98,12 +84,14 @@ public class Anagram : MonoBehaviour {
 
 		
         Hp.text = LifePoint.ToString();
+       
 
 		if (isDone && !isPlay) {
 
 			canvas1.SetActive (false);
 			canvas2.SetActive (true);
-		}
+            Clue.text = tipeSoal.ToString();
+        }
 
 		if (!isDone && isPlay) {
 
@@ -115,27 +103,30 @@ public class Anagram : MonoBehaviour {
 	}
 
 
-	private string GetSoal(List<string> soalRand)
+	private string GetSoal(string [] soalRand)
 	{
-		int count = soalRand.Count;
+		int count = soalRand.Length;
 		int random = Random.Range (0, count);
 
 		string Soalrandom = soalRand [random];
+        string Kategori = kategori[random];
+ 
 
 		while (Soalrandom.Length != JumlahString) {
 
 			random = Random.Range (0, count);
 			Soalrandom = soalRand [random];
-		}
+            Kategori = kategori[random];
+        }
 
 		soal = (string) Soalrandom;
+        tipeSoal = (string)Kategori;
 
 		soal = soal.ToUpper ();
 
 		print (soal);
 
-		return soal;
-
+        return soal;
 	}
 
 	static void RandomList(int [] array) // random prevent repeating index
@@ -229,8 +220,9 @@ public class Anagram : MonoBehaviour {
 		if (Jawaban == Soal) 
 		{
 			Result.text = "Selamat, Jawaban anda benar!";
-			//Score.text = GET.scoreAnagram.ToString();
-			txtSentence.SetActive(true);
+            Score.totalScore = 100 * LifePoint;
+			TxtSentence.SetActive(true);
+            SendButton.SetActive(true);
 		}
 		else 
 		{
@@ -243,8 +235,6 @@ public class Anagram : MonoBehaviour {
 			Result.text = "Maaf, Anda Gagal!";
 			ReplayButton.SetActive (true);
 		}
-
-	
 	}
 
 	public void ReplayCLick()
@@ -253,14 +243,37 @@ public class Anagram : MonoBehaviour {
 		isPlay = true;
 	}
 
+    public void SendDataClick()
+    {
+        string kalimat = txtSentences.text;
+        if (kalimat.Contains(soal))
+        {
+            InsertAnagram.Insert(kalimat, soal);
+            InsertScore.Insert("Anagram", Score.totalScore);
+
+            print("Posted");
+        }
+
+        else
+        {
+            StartCoroutine("Btnply");
+        }
+    }
+
+    IEnumerator Btnply()
+    {
+        SendButton.SetActive(false);
+        yield return new WaitForSeconds(1.5f);
+        SendButton.SetActive(true);
+    }
+
 
 
 	/*
 	 * WHAT TO DO NOW:
 	 * BUILD REPLAY BUTTON (done)
 	 * BUILD TIMER (done)
-	 * BUILD TEXT FIELD POST TO DATABASE
-	 * BUILD CHAR CONTAIN RESULT
+	 * BUILD TEXT FIELD POST TO DATABASe (done)
 	 * TURN ON / OFF CANVAS (done)
 	 * DETERMINE HP TEXT (done)
 	 * DETERMINE SCORE TEXT INTO SCORE STATIS (done)
