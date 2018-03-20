@@ -6,55 +6,57 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-public class Anagram : MonoBehaviour {
+public class Anagram : MonoBehaviour
+{
 
 
-	static System.Random rand =  new System.Random();
+    static System.Random rand = new System.Random();
 
-	private string soal;
+    private string soal;
     private string tipeSoal;
 
-	private int LifePoint = 5;
+    private int LifePoint = 5;
 
 
-	private bool isPlay = false;
-	private bool isDone = false;
-	private bool isMatch = false;
+    private bool isPlay = false;
+    private bool isDone = false;
+    private bool isMatch = false;
 
-	public int JumlahString;
-	public int desiredLength;
+    public int JumlahString;
+    public int desiredLength;
 
-	public GameObject canvas1;
-	public GameObject canvas2;
-	public GameObject ReplayButton;
+    public GameObject canvas1;
+    public GameObject canvas2;
+    public GameObject ReplayButton;
     public GameObject TxtSentence;
     public GameObject SendButton;
-    
 
-	public Text[] txtObj;
-	public Text Hp;
-	public Text Result;
-	public Text Clue;
 
-	public InputField txtField;
+    public Text[] txtObj;
+    public Text Hp;
+    public Text Result;
+    public Text Clue;
+
+    public InputField txtField;
     public InputField txtSentences;
 
-	private string[] kamus;
+    private string[] kamus;
     private string[] kategori;
 
-	private List<char> kar			   =  new List<char> ();
-	private List<char> distract        =  new List<char> (){'!', '@', '#', '$', '%', '&', '?', '<', '>', '{', '}', ']', '[', '|', '/', '~', '+', '^'};
-	private List<char> desiredDistract =  new List<char> ();
-	private List<char> Generate        =  new List<char> ();
-	private List<char> FinalGenerate   =  new List<char> ();
+    private List<char> kar = new List<char>(); //list character pada soal yg terpilih
+    private List<char> distract = new List<char>() { '!', '@', '#', '$', '%', '&', '?', '<', '>', '{', '}', ']', '[', '|', '/', '~', '+', '^' };
+    private List<char> desiredDistract = new List<char>(); //list distracte yang terpilih
+    private List<char> Generate = new List<char>(); //list gabungan antara distraksi dan soal
+    private List<char> FinalGenerate = new List<char>(); //list generate yang telah di random
 
 
 
-	// Use this for initialization
+    // Use this for initialization
 
-	IEnumerator Start () {
-		
-		WWW items = new WWW("http://localhost/BrainGameDB/items.php");
+    IEnumerator Start()
+    {
+
+        WWW items = new WWW("http://localhost/BrainGameDB/items.php");
         WWW itemsTheme = new WWW("http://localhost/BrainGameDB/itemsTheme.php");
 
         yield return items;
@@ -66,182 +68,195 @@ public class Anagram : MonoBehaviour {
         kamus = itemsString.Split('|');
         kategori = itemsThemeString.Split('|');
 
-		print (kamus.Length);
+        print(kamus.Length);
 
-		GetSoal(kamus);
+        GetSoal(kamus);
 
-		ListMixer ();
+        ListMixer();
 
-		StartCoroutine ("PlayGame");
+        StartCoroutine("PlayGame");
 
 
 
-	}
-		
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-		
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
         Hp.text = LifePoint.ToString();
-       
 
-		if (isDone && !isPlay) {
 
-			canvas1.SetActive (false);
-			canvas2.SetActive (true);
+        if (isDone && !isPlay)
+        {
+
+            canvas1.SetActive(false);
+            canvas2.SetActive(true);
             Clue.text = tipeSoal.ToString();
         }
 
-		if (!isDone && isPlay) {
+        if (!isDone && isPlay)
+        {
 
-			isDone = false;
-			isPlay = false;
-			SceneManager.LoadScene ("Anagram");
-		}
-		
-	}
+            isDone = false;
+            isPlay = false;
+            SceneManager.LoadScene("Anagram");
+        }
+
+    }
 
 
-	private string GetSoal(string [] soalRand)
-	{
-		int count = soalRand.Length;
-		int random = Random.Range (0, count);
+    private string GetSoal(string[] soalRand)
+    {
+        int count = soalRand.Length;
+        int random = Random.Range(0, count);
 
-		string Soalrandom = soalRand [random];
+        string Soalrandom = soalRand[random];
         string Kategori = kategori[random];
- 
 
-		while (Soalrandom.Length != JumlahString) {
 
-			random = Random.Range (0, count);
-			Soalrandom = soalRand [random];
+        while (Soalrandom.Length != JumlahString)
+        {
+
+            random = Random.Range(0, count);
+            Soalrandom = soalRand[random];
             Kategori = kategori[random];
         }
 
-		soal = (string) Soalrandom;
+        soal = (string)Soalrandom;
         tipeSoal = (string)Kategori;
 
-		soal = soal.ToUpper ();
+        soal = soal.ToUpper();
 
-		print (soal);
+        print(soal);
 
         return soal;
-	}
+    }
 
-	static void RandomList(int [] array) // random prevent repeating index
-	{
-		int arraySize = array.Length;
-		int random;
-		int temp;
+    static void RandomList(int[] array) // random prevent repeating index
+    {
+        int arraySize = array.Length;
+        int random;
+        int temp;
 
-		for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < arraySize; i++)
+        {
 
-			random = i + (int)(rand.NextDouble () * (arraySize - i));
-			temp = array [random];
-			array [random] = array [i];
-			array [i] = temp;
-		}
-	}
+            random = i + (int)(rand.NextDouble() * (arraySize - i));
+            temp = array[random];
+            array[random] = array[i];
+            array[i] = temp;
+        }
+    }
 
-	private void split()// split string soal into char, and store it to list
-	{
+    private void split()// split string soal into char, and store it to list
+    {
 
-        foreach (char c in soal) {
-			kar.Add (c);
-		}
-	}
+        foreach (char c in soal)
+        {
+            kar.Add(c);
+        }
+    }
 
-	private void Distraction() // add desired distraction
-	{
-		split ();
-		for (int r = 0; r < desiredLength; r++) {
-			desiredDistract.Add (distract [(int)Random.Range (0, distract.Count)]);
-		}
-	}
+    private void Distraction() // add desired distraction
+    {
+        split();
+        for (int r = 0; r < desiredLength; r++)
+        {
+            desiredDistract.Add(distract[(int)Random.Range(0, distract.Count)]);
+        }
+    }
 
-	private void  Store() // store char soal and distract into list
-	{
-		Distraction ();
-		int sumChar = (int)kar.Count;
-		int sumDist = (int)desiredDistract.Count;
+    private void Store() // store char soal and distract into list
+    {
+        Distraction();
+        int sumChar = (int)kar.Count;
+        int sumDist = (int)desiredDistract.Count;
 
-		for (int i = 0; i < sumChar; i++) {
-			Generate.Add (kar [i]);
-		}
+        for (int i = 0; i < sumChar; i++)
+        {
+            Generate.Add(kar[i]);
+        }
 
-		for (int j = 0; j < sumDist; j++) {
-			Generate.Add (desiredDistract [j]);
-		}
-	}
+        for (int j = 0; j < sumDist; j++)
+        {
+            Generate.Add(desiredDistract[j]);
+        }
+    }
 
-	private void ListMixer() //mix the added list into random output
-	{
-		Store ();
-		int GenerLength = Generate.Count;
-		int[] randomArray = new int[GenerLength];
+    private void ListMixer() //mix the added list into random output
+    {
+        Store();
+        int GenerLength = Generate.Count;
+        int[] randomArray = new int[GenerLength];
 
-		for (int i = 0; i < GenerLength; i++) {
-			randomArray [i] = i;
-		}
+        for (int i = 0; i < GenerLength; i++)
+        {
+            randomArray[i] = i;
+        }
 
-		RandomList (randomArray);
+        RandomList(randomArray);
 
-		for (int r = 0; r < GenerLength; r++) {
+        for (int r = 0; r < GenerLength; r++)
+        {
 
-			FinalGenerate.Add(Generate [randomArray[r]]);
-			Debug.Log (FinalGenerate[r]);
-		}
-	
-	}
+            FinalGenerate.Add(Generate[randomArray[r]]);
+            Debug.Log(FinalGenerate[r]);
+        }
 
-	IEnumerator PlayGame()
-	{
-		foreach (char r in FinalGenerate) {
-			
-			int s = (int)Random.Range (0, txtObj.Length);
+    }
 
-			txtObj [s].text = r.ToString ();
+    IEnumerator PlayGame()
+    {
+        foreach (char r in FinalGenerate)
+        {
 
-			yield return new WaitForSeconds (2f);
+            int s = (int)Random.Range(0, txtObj.Length);
 
-			txtObj [s].text = "";
+            txtObj[s].text = r.ToString();
 
-		}
-		isDone = true;
-	}
-		
+            yield return new WaitForSeconds(2f);
 
-	public void CheckJawaban()
-	{
-		string Jawaban = txtField.text;
-		string Soal = soal;
+            txtObj[s].text = "";
 
-		if (Jawaban == Soal) 
-		{
-			Result.text = "Selamat, Jawaban anda benar!";
+        }
+        isDone = true;
+    }
+
+
+    public void CheckJawaban()
+    {
+        string Jawaban = txtField.text;
+        string Soal = soal;
+
+        if (Jawaban == Soal)
+        {
+            Result.text = "Selamat, Jawaban anda benar!";
             Score.totalScore = 100 * LifePoint;
-			TxtSentence.SetActive(true);
+            TxtSentence.SetActive(true);
             SendButton.SetActive(true);
-		}
-		else 
-		{
-			Result.text = "Maaf, Jawaban anda Salah!";
-			LifePoint --;
-		}
+        }
+        else
+        {
+            Result.text = "Maaf, Jawaban anda Salah!";
+            LifePoint--;
+        }
 
-		if (LifePoint == 0) {
+        if (LifePoint == 0)
+        {
 
-			Result.text = "Maaf, Anda Gagal!";
-			ReplayButton.SetActive (true);
-		}
-	}
+            Result.text = "Maaf, Anda Gagal!";
+            ReplayButton.SetActive(true);
+        }
+    }
 
-	public void ReplayCLick()
-	{
-		isDone = false;
-		isPlay = true;
-	}
+    public void ReplayCLick()
+    {
+        isDone = false;
+        isPlay = true;
+    }
 
     public void SendDataClick()
     {
@@ -269,7 +284,7 @@ public class Anagram : MonoBehaviour {
 
 
 
-	/*
+    /*
 	 * WHAT TO DO NOW:
 	 * BUILD REPLAY BUTTON (done)
 	 * BUILD TIMER (done)

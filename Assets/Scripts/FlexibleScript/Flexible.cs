@@ -4,311 +4,535 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class Flexible : MonoBehaviour {
+public class Flexible : MonoBehaviour
+{
 
-	static System.Random rand  = new System.Random();
+    static System.Random rand = new System.Random();
 
-	public int Jsoal;
+    public int Jsoal;
 
     public GameObject CharButton;
     public GameObject PostButton;
+    public GameObject canvasPlay;
+    public GameObject canvasField;
+    public GameObject Kalimat;
+    public GameObject InsertButton;
 
-	private int tSameChar;
-	private int tSameFloor;
+    private int tSameChar;
+    private int tSameFloor;
     private int tGetChar;
     private int tGetFloor;
 
-	private int Repetition = 5;
 
+    //private double CharPercentage = (tGetChar / tSameChar) * 100;
+    //private double FloorPercentage = (tGetFloor / tSameChar) * 100;
 
-	//private double CharPercentage = (tGetChar / tSameChar) * 100;
-	//private double FloorPercentage = (tGetFloor / tSameChar) * 100;
+    private bool CharisMatched = false;
+    private bool FloorisMatched = false;
+    private bool isDone = false;
 
-	private bool CharisMatched = false;
-	private bool FloorisMatched = false;
-
-	public Text[] floor = new Text[9];
+    public Text[] floor = new Text[9];
+    public Text[] result;
+    public Text soal;
+    public InputField kalimat;
+    public GameObject[] inputKata = new GameObject[3];
+    public InputField[] InputKata = new InputField[3];
     public Text charScore;
     public Text postScore;
 
-	private int totalC;
+    private int totalC;
 
-	private string alphabet = "$%#@!*abcdefghijklmnopqrstuvwxyz1234567890?;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&";
-	private List <char> alphabets = new List <char> ();
+    private string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private List<char> alphabets = new List<char>(); //list alphabet sri string alphabet
 
-
-	List <char> randomedChar  =  new List <char> ();
-	List <char> sameChar      =  new List <char> ();
-	List <char> sameClone 	  =  new List <char> ();
-	List <char> difChar       =  new List <char> ();
-
-	List <char> finalChar     =  new List <char> ();
-	List <Text> tFl  		  =  new List <Text> ();
+    private string[] kamus; // array kamus data
 
 
-	// Use this for initialization
-	void Start () {
+    List<char> randomedChar = new List<char>(); //list char random
+    List<char> sameChar = new List<char>(); //list randomed  yang akan di samakan
+    List<char> sameClone = new List<char>(); //list samechar yang sudah di gandakan
+    List<char> difChar = new List<char>(); //list randomechar yang berbeda
+    List<char> wasDoubled = new List<char>(); //list double value char dari finalchar 
+    List<char> distinctDouble = new List<char>(); //list wasdouble yang telah di distinct
+    List<char> finalChar = new List<char>(); //list dari gabungan anatar random list sameclone dan difchar
+    List<Text> tFl = new List<Text>(); //list gameobject text
 
-		//randomingChar ();
 
-		GatherChar ();
-		RandomingPosition ();
-		StartCoroutine ("SetTask");
-		CheckDouble ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    IEnumerator Start()
+    {
+
+        WWW items = new WWW("http://localhost/BrainGameDB/items.php");
+
+        yield return items;
+
+        string itemsString = items.text;
+
+        kamus = itemsString.Split('|');
+
+        for (int i = 0; i < kamus.Length; i++)
+        {
+            kamus[i] = kamus[i].ToUpper();
+            print(kamus[i]);
+        }
+
+        GatherChar();
+        RandomingPosition();
+        StartCoroutine("SetTask");
+        CheckDouble();
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         charScore.text = tGetChar.ToString();
         postScore.text = tGetFloor.ToString();
-		
-	}
 
-	private void randomingChar()
-	{
-		foreach (char c in  alphabet) {
-			alphabets.Add (c);
-		}
+        if (isDone)
+        {
+            canvasPlay.SetActive(false);
+            canvasField.SetActive(true);
 
-		int jAlpha = alphabets.Count;
+            IdentifyChar();
 
-		for (int i = 0; i < Jsoal; i++) {
+            if (InputKata[2].text.Length != 0)
+            {
 
-			int Random = i + (int)(rand.NextDouble () * ( jAlpha - i));
-			randomedChar.Add (alphabets [Random]);
-			//Debug.Log (randomedChar [i]);
-		}
+                if (result[0].text == "Clear" && result[1].text == "Clear" && result[2].text == "Clear")
+                {
+                    Kalimat.SetActive(true);
+                }
+            }
+        }
 
-		int dCount = randomedChar.Count;
+    }
+    private void randomingChar()
+    {
+        foreach (char c in alphabet)
+        {
+            alphabets.Add(c);
+        }
 
-		for (int i = 0; i < dCount; i++) {
+        int jAlpha = alphabets.Count;
 
-			sameChar.Add (randomedChar [i]);
-			difChar.Add (randomedChar [i + 1]);
+        for (int i = 0; i < Jsoal; i++)
+        {
 
-			i++;
-		}
-			
+            int Random = i + (int)(rand.NextDouble() * (jAlpha - i));
+            randomedChar.Add(alphabets[Random]);
 
-		int SCount = sameChar.Count;
+        }
 
-		for (int i = 0; i < SCount ; i++) {
-			
-			sameClone.Add (sameChar [i]);
-			sameClone.Add (sameChar [i]);
-		}
+        int dCount = randomedChar.Count;
 
-		for (int i = 0; i < sameClone.Count; i++) {
-			Debug.Log (sameClone[i]);
-		}
+        for (int i = 0; i < dCount; i++)
+        {
 
+            sameChar.Add(randomedChar[i]);
+            difChar.Add(randomedChar[i + 1]);
 
-	}
-		
-	private void GatherChar()
-	{
-		randomingChar ();
-
-		totalC = (sameClone.Count + difChar.Count);
-		//int sparTC = totalC / 3;
-
-		for (int i = 0; i < totalC ; i++) {
-
-			int select = (int)Random.Range (0, 2);
-			int rand1 = (int)Random.Range (0, sameClone.Count);
-			int rand2 = (int)Random.Range (0, difChar.Count);
-
-			if (select == 0) {
+            i++;
+        }
 
 
-				if (rand1 == 0 ) 
-				{
+        int SCount = sameChar.Count;
 
-					finalChar.Add (sameClone [rand1]);
-				} 
-				else
-				{
-					finalChar.Add (sameClone [rand1]);
-					finalChar.Add (sameClone [rand1 - 1]);
+        for (int i = 0; i < SCount; i++)
+        {
 
-					i++;
-				}
+            sameClone.Add(sameChar[i]);
+            sameClone.Add(sameChar[i]);
+        }
 
-				Debug.Log ("Add same");
-			}
-
-			if (select == 1) {
-
-				finalChar.Add (difChar [rand2]);
-				Debug.Log ("Add dif");
-			}
-		}
-
-		Debug.Log ("========================");
-
-		for (int i = 0; i < finalChar.Count; i++) {
-			Debug.Log (finalChar[i]);
-		}
-			
-	}
+        for (int i = 0; i < sameClone.Count; i++)
+        {
+            Debug.Log(sameClone[i]);
+        }
 
 
-	private void RandomingPosition()
-	{
-		Text temp;
+    }
 
-		int fc = floor.Length;
-		int tfC = Jsoal + (Jsoal / 2);
-		Text [] sameFloor = new Text[Jsoal];
-		Text [] difFloor  = new Text[Jsoal / 2];
+    private void GatherChar()
+    {
+        randomingChar();
 
+        totalC = (sameClone.Count + difChar.Count);
+        //int sparTC = totalC / 3;
 
-		for (int i = 0; i < fc; i++) {
+        for (int i = 0; i < totalC; i++)
+        {
 
-			int random = i + (int)(rand.NextDouble() * (fc - i));
+            int select = (int)Random.Range(0, 2);
+            int rand1 = (int)Random.Range(0, sameClone.Count);
+            int rand2 = (int)Random.Range(0, difChar.Count);
 
-			temp = floor [random];
-			floor [random] = floor [i];
-			floor [i] = temp;
-
-		} // shuffle floor
-
-		for (int i = 0; i < Jsoal; i++) {
-
-			int random = (int)Random.Range (0, fc);
-
-			sameFloor [i] = floor [random];
-			sameFloor [i + 1] = floor [random];
-
-			i++;
-		} 
-
-		for (int i = 0; i < Jsoal / 2; i++) {
-
-			int random = (int)Random.Range (0, fc);
-			difFloor [i] = floor [random];
-		}
-
-		for (int i = 0; i < tfC; i++) {
-
-			int random = (int)Random.Range (0, 2);
-			int rand1 = (int)Random.Range (0, sameFloor.Length);
-			int rand2 = (int)Random.Range (0, difFloor.Length);
-
-			if (random == 0) {
-
-				tFl.Add (sameFloor [rand1]);
-			}
-
-			if (random == 1) {
-
-				tFl.Add (difFloor [rand2]);
-
-			}
-		}
-
-		for (int i = 0; i < tfC; i++) {
-
-			Debug.Log (tFl.ToString ());
-		}
-			
-	}
+            if (select == 0)
+            {
 
 
-	IEnumerator SetTask()
-	{
-		int JtS = Jsoal + (Jsoal / 2);
-		
-		for (int i = 0; i < JtS; i++) {
+                if (rand1 == 0)
+                {
 
-			tFl [i].text = finalChar [i].ToString ();
+                    finalChar.Add(sameClone[rand1]);
+                }
+                else
+                {
+                    finalChar.Add(sameClone[rand1]);
+                    finalChar.Add(sameClone[rand1 - 1]);
 
-			if (i > 0) {
-				if (finalChar [i] == finalChar [i - 1]) {
+                    i++;
+                }
 
-					CharisMatched = true;
+                Debug.Log("Add same");
+            }
 
-				}
-				if (tFl [i] == tFl [i - 1]) {
+            if (select == 1)
+            {
 
-					FloorisMatched = true;
+                finalChar.Add(difChar[rand2]);
+                Debug.Log("Add dif");
+            }
+        }
 
-				} 
-			}
+        Debug.Log("========================");
 
-			yield return new WaitForSeconds (2f);
+        for (int i = 0; i < finalChar.Count; i++)
+        {
+            Debug.Log(finalChar[i]);
+        }
 
-			CharisMatched  = false;
-			FloorisMatched = false;
+    }
 
-			tFl [i].text = "";
+
+    private void RandomingPosition()
+    {
+        Text temp;
+
+        int fc = floor.Length;
+        int tfC = Jsoal + (Jsoal / 2);
+        Text[] sameFloor = new Text[Jsoal];
+        Text[] difFloor = new Text[Jsoal / 2];
+
+
+        for (int i = 0; i < fc; i++)
+        {
+
+            int random = i + (int)(rand.NextDouble() * (fc - i));
+
+            temp = floor[random];
+            floor[random] = floor[i];
+            floor[i] = temp;
+
+        } // shuffle floor
+
+        for (int i = 0; i < Jsoal; i++)
+        {
+
+            int random = (int)Random.Range(0, fc);
+
+            sameFloor[i] = floor[random];
+            sameFloor[i + 1] = floor[random];
+
+            i++;
+        }
+
+        for (int i = 0; i < Jsoal / 2; i++)
+        {
+
+            int random = (int)Random.Range(0, fc);
+            difFloor[i] = floor[random];
+        }
+
+        for (int i = 0; i < tfC; i++)
+        {
+
+            int random = (int)Random.Range(0, 2);
+            int rand1 = (int)Random.Range(0, sameFloor.Length);
+            int rand2 = (int)Random.Range(0, difFloor.Length);
+
+            if (random == 0)
+            {
+
+                tFl.Add(sameFloor[rand1]);
+            }
+
+            if (random == 1)
+            {
+
+                tFl.Add(difFloor[rand2]);
+
+            }
+        }
+
+        for (int i = 0; i < tfC; i++)
+        {
+
+            Debug.Log(tFl.ToString());
+        }
+
+    }
+
+
+    IEnumerator SetTask()
+    {
+        int JtS = Jsoal + (Jsoal / 2);
+
+        for (int i = 0; i < JtS; i++)
+        {
+
+            tFl[i].text = finalChar[i].ToString();
+
+            if (i > 0)
+            {
+                if (finalChar[i] == finalChar[i - 1])
+                {
+
+                    CharisMatched = true;
+
+
+                }
+                if (tFl[i] == tFl[i - 1])
+                {
+
+                    FloorisMatched = true;
+
+                }
+            }
+
+            yield return new WaitForSeconds(2f);
+
+            CharisMatched = false;
+            FloorisMatched = false;
+
+            tFl[i].text = "";
 
             CharButton.SetActive(true);
             PostButton.SetActive(true);
 
-		}
-	}
+        }
 
-	private void CheckDouble()
-	{
-		int TotalChar = finalChar.Count;
-		int TotalFloor = tFl.Count;
+        isDone = true;
+    }
 
-		if (TotalChar == TotalFloor) {
+    private void CheckDouble()
+    {
+        int TotalChar = finalChar.Count;
+        int TotalFloor = tFl.Count;
 
-			for (int i = 0; i < TotalChar - 1; i++) {
-				
-				if (finalChar [i] == finalChar [i + 1]) {
+        if (TotalChar == TotalFloor)
+        {
 
-					tSameChar = tSameChar + 1;
-				}
+            for (int i = 0; i < TotalChar - 1; i++)
+            {
 
-			}
-				
-			Debug.Log (tSameChar);
+                if (finalChar[i] == finalChar[i + 1])
+                {
 
-			for (int i = 0; i < TotalFloor - 1; i++) {
+                    tSameChar = tSameChar + 1;
+                    wasDoubled.Add(finalChar[i]);
 
-				if (tFl [i] == tFl [i + 1]) {
+                }
 
-					tSameFloor = tSameFloor + 1;
-				}
-			}
+            }
 
-			Debug.Log (tSameFloor);
-				
-		}
-			
-	}
+            Debug.Log(tSameChar);
 
-	public void ClickHuruf()
-	{
-		if (CharisMatched) {
+            for (int i = 0; i < TotalFloor - 1; i++)
+            {
 
-			tGetChar = tGetChar + 1;
-		}
+                if (tFl[i] == tFl[i + 1])
+                {
+
+                    tSameFloor = tSameFloor + 1;
+                }
+            }
+
+            Debug.Log(tSameFloor);
+
+        }
+
+        print("====================");
+
+        IEnumerable<char> distinctSame = wasDoubled.Distinct();
+
+        foreach (char c in distinctSame)
+        {
+            Debug.Log(c);
+            distinctDouble.Add(c);
+        }
+
+    }
+
+    public void ClickHuruf()
+    {
+        if (CharisMatched)
+        {
+
+            tGetChar = tGetChar + 1;
+        }
 
         CharButton.SetActive(false);
 
-	}
-	public void ClickPosisi()
-	{
-		if (FloorisMatched) {
+    }
+    public void ClickPosisi()
+    {
+        if (FloorisMatched)
+        {
 
-			tGetFloor = tGetFloor + 1;
-		}
+            tGetFloor = tGetFloor + 1;
+        }
 
         PostButton.SetActive(false);
 
-	}
+    }
 
-	/*
+    private void IdentifyChar()
+    {
+        int JChar = distinctDouble.Count;
+        int identy;
+
+        char[] choosen = new char[3];
+
+        if (JChar > 3)
+        {
+            identy = 3;
+        }
+        else
+        {
+            identy = JChar;
+        }
+
+        for (int i = 0; i < identy; i++)
+        {
+            inputKata[i].SetActive(true);
+        }
+
+    }
+
+
+    public void Check()
+    {
+        bool isMatched = CheckKamus(InputKata[0].text);
+
+        if (isMatched)
+        {
+            result[0].text = "Clear";
+            InputKata[0].readOnly = true;
+        }
+        else
+        {
+            result[0].text = "Salah";
+            InputKata[0].text = "";
+        }
+
+    }
+
+    public void Check2()
+    {
+        bool isMatched = CheckKamus(InputKata[1].text);
+
+        if (isMatched)
+        {
+            result[1].text = "Clear";
+            InputKata[1].readOnly = true;
+        }
+        else
+        {
+            result[1].text = "Salah";
+            InputKata[1].text = "";
+        }
+    }
+
+    public void Check3()
+    {
+        bool isMatched = CheckKamus(InputKata[2].text);
+
+        if (isMatched)
+        {
+            result[2].text = "Clear";
+            InputKata[2].readOnly = true;
+        }
+        else
+        {
+            result[2].text = "Salah";
+            InputKata[2].text = "";
+        }
+
+    }
+
+    private bool CheckKamus(string kata)
+    {
+        char[] c = kata.ToCharArray();
+        int i = kamus.Length;
+        int j = distinctDouble.Count;
+        bool isThrough = false;
+        bool isMatched = false;
+
+        print(j);
+        print(i);
+        print(kata);
+
+        for (int y = 0; y < j; y++)
+        {
+            if (c[0] == distinctDouble[y])
+            {
+                isThrough = true;
+                y = j;
+            }
+        }
+
+        if (isThrough)
+        {
+
+            for (int x = 0; x < i; x++)
+            {
+                if (kata == kamus[x])
+                {
+                    isMatched = true;
+                    x = i;
+                }
+            }
+
+            if (isMatched)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    public void CheckKalimat()
+    {
+        if (kalimat.text.Contains(InputKata[0].text) && kalimat.text.Contains(InputKata[1].text) && kalimat.text.Contains(InputKata[2].text))
+        {
+            InsertButton.SetActive(true);
+        }
+
+        else
+        {
+            kalimat.text = "";
+        }
+    }
+
+
+
+    /*
 	 * WHAT TO DO NOW:
 	 * REPLAY THE SCENE ABOUT 5 TIMES
 	 * TAMPUNG SCORE TIAP REPLAY DALAM BENTUK STATIS
 	 * BUILD 2 SCENE GAMEPLAY, SCOREBOARD
 	*/
-		
+
 
 }

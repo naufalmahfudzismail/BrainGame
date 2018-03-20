@@ -350,7 +350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1802689482047462
 GameObject:
   m_ObjectHideFlags: 1
@@ -402,7 +402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1893027228367956
 GameObject:
   m_ObjectHideFlags: 1
@@ -909,6 +909,8 @@ MonoBehaviour:
   Jsoal: 30
   CharButton: {fileID: 1865262910915120}
   PostButton: {fileID: 1767317093333314}
+  canvasPlay: {fileID: 0}
+  canvasField: {fileID: 0}
   floor:
   - {fileID: 114079656543669518}
   - {fileID: 114736628155602346}

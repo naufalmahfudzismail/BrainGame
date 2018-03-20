@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InsertAnagram  {
+public class InsertAnagram
+{
 
-   static string InsertURL = "http://localhost/BrainGameDB/Insert.php";
+    static string InsertURL = "http://localhost/BrainGameDB/Insert.php";
 
     public static void Insert(string kalimat, string katadasar)
     {
         WWWForm form = new WWWForm();
-        form.AddField("katadasarPost", katadasar );
+        form.AddField("katadasarPost", katadasar);
         form.AddField("kalimatPost", kalimat);
-        WWW www = new WWW(InsertURL, form );
+        WWW www = new WWW(InsertURL, form);
     }
 
-	
+
 }
 
 public class InsertFlexible
