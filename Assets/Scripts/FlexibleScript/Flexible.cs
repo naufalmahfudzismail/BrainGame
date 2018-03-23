@@ -419,7 +419,7 @@ public class Flexible : MonoBehaviour
 
         if (isMatched)
         {
-            result[0].text = "Clear";
+            result[0].text = "Benar";
             InputKata[0].readOnly = true;
         }
         else
@@ -436,7 +436,7 @@ public class Flexible : MonoBehaviour
 
         if (isMatched)
         {
-            result[1].text = "Clear";
+            result[1].text = "benar";
             InputKata[1].readOnly = true;
         }
         else
@@ -452,7 +452,7 @@ public class Flexible : MonoBehaviour
 
         if (isMatched)
         {
-            result[2].text = "Clear";
+            result[2].text = "Benar";
             InputKata[2].readOnly = true;
         }
         else
