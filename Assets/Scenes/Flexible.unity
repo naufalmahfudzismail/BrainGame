@@ -143,7 +143,7 @@ Transform:
   - {fileID: 926147234}
   - {fileID: 524870722}
   m_Father: {fileID: 230507632}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &84709831
 MonoBehaviour:
@@ -293,11 +293,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 84709830}
-  - {fileID: 519966712}
   - {fileID: 510143936}
-  - {fileID: 793088226}
+  - {fileID: 84709830}
   - {fileID: 926419631}
+  - {fileID: 519966712}
+  - {fileID: 793088226}
   - {fileID: 676868604}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -335,7 +335,7 @@ RectTransform:
   m_LocalScale: {x: 1.0000919, y: 1.0000919, z: 1.0000919}
   m_Children: []
   m_Father: {fileID: 230507632}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -411,12 +411,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 230507632}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.999995, y: -4.000004}
-  m_SizeDelta: {x: 301.9, y: 37.4}
+  m_AnchoredPosition: {x: -2.3, y: -28.7}
+  m_SizeDelta: {x: 346.1, y: 48.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &519966713
 MonoBehaviour:
@@ -450,9 +450,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Buatlah Kalimat berdasarkan kata kata di atas
-
-'
+  m_Text: 
 --- !u!222 &519966714
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -867,7 +865,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 78.99999, y: -204}
+  m_AnchoredPosition: {x: 79.9, y: -250.8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &676868605
@@ -975,11 +973,11 @@ RectTransform:
   - {fileID: 1087846985}
   - {fileID: 1567346026}
   m_Father: {fileID: 230507632}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -19, y: -92}
+  m_AnchoredPosition: {x: -10, y: -146}
   m_SizeDelta: {x: 230.2, y: 135.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793088227
@@ -1325,7 +1323,7 @@ RectTransform:
   - {fileID: 1737442754}
   - {fileID: 930855001}
   m_Father: {fileID: 230507632}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2469,6 +2467,7 @@ MonoBehaviour:
   canvasField: {fileID: 230507628}
   Kalimat: {fileID: 793088225}
   InsertButton: {fileID: 676868603}
+  Soaltxt: {fileID: 519966711}
   floor:
   - {fileID: 1256822374}
   - {fileID: 1256822373}

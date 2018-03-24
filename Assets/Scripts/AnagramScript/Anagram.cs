@@ -20,7 +20,6 @@ public class Anagram : MonoBehaviour
 
     private bool isPlay = false;
     private bool isDone = false;
-    private bool isMatch = false;
 
     public int JumlahString;
     public int desiredLength;

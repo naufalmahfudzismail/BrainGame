@@ -17,11 +17,13 @@ public class Flexible : MonoBehaviour
     public GameObject canvasField;
     public GameObject Kalimat;
     public GameObject InsertButton;
+    public GameObject Soaltxt;
 
     private int tSameChar;
     private int tSameFloor;
     private int tGetChar;
     private int tGetFloor;
+    private string FieldSoal;
 
 
     //private double CharPercentage = (tGetChar / tSameChar) * 100;
@@ -73,7 +75,6 @@ public class Flexible : MonoBehaviour
         for (int i = 0; i < kamus.Length; i++)
         {
             kamus[i] = kamus[i].ToUpper();
-            print(kamus[i]);
         }
 
         GatherChar();
@@ -98,14 +99,25 @@ public class Flexible : MonoBehaviour
 
             IdentifyChar();
 
-            if (InputKata[2].text.Length != 0)
+            if (result[0].text == "Benar" && result[1].text == "Benar" && result[2].text == "Benar")
             {
+                string[] kata = new string[3];
 
-                if (result[0].text == "Clear" && result[1].text == "Clear" && result[2].text == "Clear")
+                for (int i = 0; i < kata.Length; i++)
                 {
-                    Kalimat.SetActive(true);
+                    kata[i] = InputKata[i].text;
                 }
+
+                FieldSoal = string.Join(",", kata);
+
+                Soaltxt.SetActive(true);
+
+                soal.text = "Buatlah kalimat tersebut dengan kata " + FieldSoal;
+
+                Kalimat.SetActive(true);
+
             }
+
         }
 
     }
@@ -322,37 +334,32 @@ public class Flexible : MonoBehaviour
         int TotalChar = finalChar.Count;
         int TotalFloor = tFl.Count;
 
-        if (TotalChar == TotalFloor)
+        for (int i = 0; i < TotalChar - 1; i++)
         {
 
-            for (int i = 0; i < TotalChar - 1; i++)
+            if (finalChar[i] == finalChar[i + 1])
             {
 
-                if (finalChar[i] == finalChar[i + 1])
-                {
-
-                    tSameChar = tSameChar + 1;
-                    wasDoubled.Add(finalChar[i]);
-
-                }
+                tSameChar = tSameChar + 1;
+                wasDoubled.Add(finalChar[i]);
 
             }
-
-            Debug.Log(tSameChar);
-
-            for (int i = 0; i < TotalFloor - 1; i++)
-            {
-
-                if (tFl[i] == tFl[i + 1])
-                {
-
-                    tSameFloor = tSameFloor + 1;
-                }
-            }
-
-            Debug.Log(tSameFloor);
 
         }
+
+        Debug.Log(tSameChar);
+
+        for (int i = 0; i < TotalFloor - 1; i++)
+        {
+
+            if (tFl[i] == tFl[i + 1])
+            {
+
+                tSameFloor = tSameFloor + 1;
+            }
+        }
+
+        Debug.Log(tSameFloor);
 
         print("====================");
 
@@ -391,21 +398,8 @@ public class Flexible : MonoBehaviour
 
     private void IdentifyChar()
     {
-        int JChar = distinctDouble.Count;
-        int identy;
 
-        char[] choosen = new char[3];
-
-        if (JChar > 3)
-        {
-            identy = 3;
-        }
-        else
-        {
-            identy = JChar;
-        }
-
-        for (int i = 0; i < identy; i++)
+        for (int i = 0; i < 3; i++)
         {
             inputKata[i].SetActive(true);
         }
@@ -436,7 +430,7 @@ public class Flexible : MonoBehaviour
 
         if (isMatched)
         {
-            result[1].text = "benar";
+            result[1].text = "Benar";
             InputKata[1].readOnly = true;
         }
         else
@@ -463,7 +457,7 @@ public class Flexible : MonoBehaviour
 
     }
 
-    private bool CheckKamus(string kata)
+    private bool CheckKamus(string kata) //check kata, apakah kata depan nya sesuai dan apakah kata tersebut sesuai kamus data
     {
         char[] c = kata.ToCharArray();
         int i = kamus.Length;
@@ -475,6 +469,8 @@ public class Flexible : MonoBehaviour
         print(i);
         print(kata);
 
+
+
         for (int y = 0; y < j; y++)
         {
             if (c[0] == distinctDouble[y])
@@ -483,6 +479,7 @@ public class Flexible : MonoBehaviour
                 y = j;
             }
         }
+
 
         if (isThrough)
         {
