@@ -233,7 +233,7 @@ public class Anagram : MonoBehaviour
         if (Jawaban == Soal)
         {
             Result.text = "Selamat, Jawaban anda benar!";
-            Score.totalScore = 100 * LifePoint;
+            Score.totalScore = 1000 * LifePoint;
             TxtSentence.SetActive(true);
             SendButton.SetActive(true);
         }

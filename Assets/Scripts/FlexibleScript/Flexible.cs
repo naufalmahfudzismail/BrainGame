@@ -19,10 +19,13 @@ public class Flexible : MonoBehaviour
     public GameObject InsertButton;
     public GameObject Soaltxt;
 
-    private int tSameChar;
-    private int tSameFloor;
-    private int tGetChar;
-    private int tGetFloor;
+    private double tSameChar;
+    private double tSameFloor;
+    private double tGetChar;
+    private double tGetFloor;
+    private double Skor;
+
+
     private string FieldSoal;
 
 
@@ -41,6 +44,8 @@ public class Flexible : MonoBehaviour
     public InputField[] InputKata = new InputField[3];
     public Text charScore;
     public Text postScore;
+    public Text Score;
+    public Text ResultCek;
 
     private int totalC;
 
@@ -92,8 +97,17 @@ public class Flexible : MonoBehaviour
         charScore.text = tGetChar.ToString();
         postScore.text = tGetFloor.ToString();
 
+
         if (isDone)
         {
+            float Cchar = (float)(tGetChar / tSameChar) * 1000;
+            float Cpskor = (float)(tGetFloor / tSameFloor) * 2000;
+
+
+            double Total = Cchar + Cpskor + Skor;
+
+            Score.text = "Score Game : " + Total;
+
             canvasPlay.SetActive(false);
             canvasField.SetActive(true);
 
@@ -411,9 +425,10 @@ public class Flexible : MonoBehaviour
     {
         bool isMatched = CheckKamus(InputKata[0].text);
 
-        if (isMatched)
+        if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
         {
             result[0].text = "Benar";
+            Skor = Skor + 100;
             InputKata[0].readOnly = true;
         }
         else
@@ -428,9 +443,10 @@ public class Flexible : MonoBehaviour
     {
         bool isMatched = CheckKamus(InputKata[1].text);
 
-        if (isMatched)
+        if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
         {
             result[1].text = "Benar";
+            Skor = Skor + 100;
             InputKata[1].readOnly = true;
         }
         else
@@ -444,9 +460,10 @@ public class Flexible : MonoBehaviour
     {
         bool isMatched = CheckKamus(InputKata[2].text);
 
-        if (isMatched)
+        if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
         {
             result[2].text = "Benar";
+            Skor = Skor + 100;
             InputKata[2].readOnly = true;
         }
         else
@@ -513,14 +530,27 @@ public class Flexible : MonoBehaviour
     {
         if (kalimat.text.Contains(InputKata[0].text) && kalimat.text.Contains(InputKata[1].text) && kalimat.text.Contains(InputKata[2].text))
         {
+            Skor = Skor + 500;
+            ResultCek.text = "Benar!";
             InsertButton.SetActive(true);
         }
 
         else
         {
+            ResultCek.text = "Kalimat belum sesuai";
             kalimat.text = "";
+
+            StartCoroutine("Delay");
+            ResultCek.text = "Tap here";
+
         }
     }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+    }
+
 
 
 
