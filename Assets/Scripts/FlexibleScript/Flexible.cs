@@ -23,7 +23,7 @@ public class Flexible : MonoBehaviour
     private double tSameFloor;
     private double tGetChar;
     private double tGetFloor;
-    private double Skor;
+    private float Skor;
 
 
     private string FieldSoal;
@@ -104,7 +104,7 @@ public class Flexible : MonoBehaviour
             float Cpskor = (float)(tGetFloor / tSameFloor) * 2000;
 
 
-            double Total = Cchar + Cpskor + Skor;
+            float Total = Cchar + Cpskor + Skor;
 
             Score.text = "Score Game : " + Total;
 
@@ -533,6 +533,7 @@ public class Flexible : MonoBehaviour
             Skor = Skor + 500;
             ResultCek.text = "Benar!";
             InsertButton.SetActive(true);
+            kalimat.readOnly = true;
         }
 
         else
