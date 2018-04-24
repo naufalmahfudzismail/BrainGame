@@ -8,6 +8,8 @@ public class Connection : MonoBehaviour
     public string UrlInsertScore = "http://segarbugarindo.com/InsertScore.php";
     public string UrlGetKataDasar = "http://segarbugarindo.com/Items.php";
     public string UrlGetKategori = "http://segarbugarindo.com/itemsTheme.php";
+    public string UrlLogin = "http://localhost/BrainGameDB/newPHP/Login.php";
+    public string UrlRegist = "http://localhost/BrainGameDB/newPHP/Regist.php";
 
     public void InsertKalimat(string game, string kalimat, string katadasar)
     {

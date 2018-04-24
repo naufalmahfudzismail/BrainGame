@@ -4,25 +4,41 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+public class Titles
+{
+    public static string title;
+}
+
+
 public class Opening : MonoBehaviour
 {
 
     // Use this for initialization
-
-    public Text error;
-    public Text Progress;
+    // erase hide inspector, if u wanna to see the object on inspector
+    [HideInInspector] public Text error;
+    [HideInInspector] public Text Progress;
     [HideInInspector] public bool isPaused = false;
-    public GameObject canvasError;
-    public Text Title;
+    [HideInInspector] public GameObject canvasError;
+    [HideInInspector] public Text Title;
+    [HideInInspector] public Text user;
+    [HideInInspector] public Text pass;
+    [HideInInspector] public Text mark;
+    [HideInInspector] public GameObject conn;
+    private Connection con;
+    string url;
 
-    void Start()
+    void Awake()
     {
-
+        print(Title.text);
+        con = conn.GetComponent<Connection>();
+        url = con.UrlLogin;
     }
 
     // Update is called once per frame
     void Update()
     {
+
 
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
@@ -37,21 +53,17 @@ public class Opening : MonoBehaviour
 
     public void Login()
     {
-        if (Title.text == "Flexible N-Back")
-            SceneManager.LoadScene("Flexible");
-        if (Title.text == "Anagram")
-            SceneManager.LoadScene("Anagram");
+
+        StartCoroutine(Check_akun());
+
     }
 
     public void Regist()
     {
+        Titles.title = Title.text;
         SceneManager.LoadScene("Register");
     }
 
-    public void Daftar()
-    {
-
-    }
 
     public void Test()
     {
@@ -62,4 +74,30 @@ public class Opening : MonoBehaviour
             isPaused = false;
         }
     }
+
+    IEnumerator Check_akun()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", user.text);
+        form.AddField("password", pass.text);
+        WWW www = new WWW(url, form);
+        yield return www;
+        string data = www.text;
+        print(data);
+
+        if (data == "benar")
+        {
+            Akun.username = user.text;
+            Akun.password = pass.text;
+            if (Title.text == "Flexible N-Back")
+                SceneManager.LoadScene("Flexible");
+            if (Title.text == "Anagram")
+                SceneManager.LoadScene("Anagram");
+        }
+        else
+        {
+            mark.text = "Username dan Password Salah!";
+        }
+    }
+
 }

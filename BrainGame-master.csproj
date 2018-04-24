@@ -346,8 +346,10 @@
     <Compile Include="Assets\MaterialUI\Scripts\Toaster.cs" />
     <Compile Include="Assets\MaterialUI\Scripts\ToggleConfig.cs" />
     <Compile Include="Assets\MaterialUI\Scripts\ToggleTextChanger.cs" />
+    <Compile Include="Assets\Scripts\Akun.cs" />
     <Compile Include="Assets\Scripts\AnagramScript\Anagram.cs" />
     <Compile Include="Assets\Scripts\Connection.cs" />
+    <Compile Include="Assets\Scripts\FlexibleScript\Daftar.cs" />
     <Compile Include="Assets\Scripts\FlexibleScript\Flexible.cs" />
     <Compile Include="Assets\Scripts\FlexibleScript\Opening.cs" />
     <Compile Include="Assets\Scripts\GlobalData.cs" />
