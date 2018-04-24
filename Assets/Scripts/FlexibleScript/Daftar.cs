@@ -7,17 +7,17 @@ using UnityEngine.SceneManagement;
 public class Daftar : MonoBehaviour
 {
 
-    public Text error;
-    public Text Progress;
-    public bool isPaused = false;
-    public GameObject canvasError;
-    public GameObject conn;
-    public Text user;
-    public Text pass;
-    public Text nama;
-    public Text kerja;
-    public Text umur;
-    public Text mark;
+    [HideInInspector] public Text error;
+    [HideInInspector] public Text Progress;
+    [HideInInspector] public bool isPaused = false;
+    [HideInInspector] public GameObject canvasError;
+    [HideInInspector] public GameObject conn;
+    [HideInInspector] public Text user;
+    [HideInInspector] public Text pass;
+    [HideInInspector] public Text nama;
+    [HideInInspector] public Text kerja;
+    [HideInInspector] public Text umur;
+    [HideInInspector] public Text mark;
     private Connection con;
     string url;
 
