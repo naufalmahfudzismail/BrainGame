@@ -11,17 +11,10 @@ public class Collection
     public static bool IsGame2 = false;
     public static bool IsDone = false;
     public static bool counter = false;
-    public static List<char> wasDoubled = new List<char>(); //list double value char dari finalchar 
-    public static List<char> distinctDouble = new List<char>(); //list wasdouble yang telah di distinct
-    public static double tGetChar;
-    public static double tGetFloor;
-    public static double tGetSound;
-    public static double tSameChar;
-    public static double tSameFloor;
-    public static double tSameSound;
     public static float Skor;
-    public static double _wrong;
-    public static double _notDefiniton;
+    public static int _counting = 0;
+    public static int _count = 0;
+    public static string[] kamus; // array kamus data
 }
 
 public class Flexible : MonoBehaviour
@@ -33,6 +26,7 @@ public class Flexible : MonoBehaviour
 
     public int JumlahCharacter = 40;
     public float WaktuPerStep = 2f;
+    public int perulangan = 2;
 
     [HideInInspector] public Button CharButton;
     [HideInInspector] public Button PostButton;
@@ -66,6 +60,8 @@ public class Flexible : MonoBehaviour
     [HideInInspector] public Text hint;
     [HideInInspector] public Text header;
     [HideInInspector] public Text Wrong;
+
+    private double _wrong;
     private string FieldSoal;
 
     private bool CharisMatched = false;
@@ -82,12 +78,21 @@ public class Flexible : MonoBehaviour
        "HEWAN", "BUAH", "SAYURAN"
     };
 
+    private List<char> wasDoubled = new List<char>(); //list double value char dari finalchar 
+    private List<char> distinctDouble = new List<char>(); //list wasdouble yang telah di distinct
+    private double tGetChar;
+    private double tGetFloor;
+    private double tGetSound;
+    private double tSameChar;
+    private double tSameFloor;
+    private double tSameSound;
+
     int index;
 
     private string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private List<char> alphabets = new List<char>(); //list alphabet sri string alphabet
 
-    private string[] kamus; // array kamus data
+
 
     List<AudioSource> SuaraSource = new List<AudioSource>();// list source suara
     List<char> randomedChar = new List<char>(); //list char random
@@ -95,6 +100,7 @@ public class Flexible : MonoBehaviour
     List<char> sameClone = new List<char>(); //list samechar yang sudah di gandakan
     List<char> difChar = new List<char>(); //list randomechar yang berbeda
     List<char> finalChar = new List<char>(); //list dari gabungan anatar random list sameclone dan difchar
+    List<char> _finalChar = new List<char>(); //disticnt finalchar
     List<Text> tFl = new List<Text>(); //list gameobject text
 
     private void Awake()
@@ -147,37 +153,46 @@ public class Flexible : MonoBehaviour
     // Use this for initialization
     IEnumerator Start()
     {
-        WWW items = new WWW(conn.getUrlKataDasar());
-        StartCoroutine(ShowProgress(items));
+        if (Collection._counting == 0)
+        {
+            WWW items = new WWW(conn.getUrlKataDasar());
+            StartCoroutine(ShowProgress(items));
+            yield return items;
+            string itemsString = items.text;
+
+            Collection.kamus = itemsString.Split('|');
+            for (int i = 0; i < Collection.kamus.Length; i++)
+            {
+                Collection.kamus[i] = Collection.kamus[i].ToUpper();
+            }
+
+            for (int i = 0; i < Collection.kamus.Length; i++)
+            {
+                print(Collection.kamus[i]);
+            }
+        }
+
+        index = Random.Range(0, kategori.Length - 1);
+        Kategori.text = kategori[index];
 
         if (!isPaused)
         {
-            if (Collection.IsGame2)
+            if (Collection.IsGame2 && !Collection.IsGame1)
             {
                 StartCoroutine("Loading");
                 canvasLoading.SetActive(false);
-                yield return items;
-                string itemsString = items.text;
-                kamus = itemsString.Split('|');
-                for (int i = 0; i < kamus.Length; i++)
-                {
-                    kamus[i] = kamus[i].ToUpper();
-                }
                 Round.text = "Round 2";
-                index = Random.Range(0, kategori.Length - 1);
-                Kategori.text = kategori[index];
-
-                for (int i = 0; i < kamus.Length; i++)
-                {
-                    print(kamus[i]);
-                }
-
                 hint.text = "Pada Round 2 : Ingat lah huruf huruf yang muncul ketika huruf itu muncul sama dengan permunculan pada 2 urutan sebelum nya";
                 header.text = "Pada Round 2 : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 2 urutan sebelum nya";
             }
 
-            if (Collection.IsGame1)
+            if (Collection.IsGame1 && !Collection.IsGame2)
+            {
+                hint.text = "Pada Round 1 : Ingat lah huruf huruf yang muncul ketika huruf itu muncul sama dengan permunculan pada 1 urutan sebelum nya";
+                header.text = "Pada Round 1 : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
                 Round.text = "Round 1";
+            }
+
             StartCoroutine("SetTask");
             CheckDouble();
         }
@@ -202,7 +217,7 @@ public class Flexible : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Application.internetReachability == NetworkReachability.NotReachable)
+        if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             canvasError.SetActive(true);
             error.text = "Network Connection Unavailable";
@@ -212,31 +227,21 @@ public class Flexible : MonoBehaviour
         }
 
 
-        charScore.text = Collection.tGetChar.ToString();
-        postScore.text = Collection.tGetFloor.ToString();
-        soundScore.text = Collection.tGetSound.ToString();
+        charScore.text = tGetChar.ToString();
+        postScore.text = tGetFloor.ToString();
+        soundScore.text = tGetSound.ToString();
 
-
-        if (Collection.IsGame2 && !Collection.IsGame1 && !Collection.counter)
+        if (Collection.IsDone)
         {
-            Collection.counter = true;
-            SceneManager.LoadScene("Flexible");
-
-     
-        }
-
-
-        if (Collection.IsDone && !Collection.IsGame1 && !Collection.IsGame2)
-        {
-            float accurate = (float)(((Collection.tGetChar + Collection.tGetFloor + Collection.tGetSound) - Collection._wrong) / (Collection.tSameChar + Collection.tSameFloor + Collection.tSameSound)) * 100;
-            int Total = (int)(accurate * 1000) - (int)(Collection._wrong * 100);
+            float accurate = (float)(((tGetChar + tGetFloor + tGetSound) - _wrong) / (tSameChar + tSameFloor + tSameSound)) * 100;
+            int Total = (int)(accurate * 1000) - (int)(_wrong * 100);
 
             if (Total < 0)
                 Total = 0;
 
             Scores.text = "Score Game : " + (Total);
             Akurasi.text = "Ketepatan : " + accurate + " %";
-            Wrong.text = "Kesalahan : " + Collection._wrong;
+            Wrong.text = "Kesalahan : " + _wrong;
             Collection.Skor = Collection.Skor + Total;
 
             canvasPlay.SetActive(false);
@@ -271,7 +276,7 @@ public class Flexible : MonoBehaviour
     {
         canvasLoading.SetActive(true);
         yield return new WaitForSeconds(5f);
-        
+
     }
     private void RandomingChar()
     {
@@ -491,7 +496,7 @@ public class Flexible : MonoBehaviour
 
             slide.value = SlideValue;
 
-            if (i > counter)
+            if (i >= counter)
             {
                 if (finalChar[i] == finalChar[i - counter])
                 {
@@ -529,17 +534,7 @@ public class Flexible : MonoBehaviour
 
         }
 
-        if (Collection.IsGame1)
-        {
-            Collection.IsGame1 = false;
-            Collection.IsGame2 = true;
-        }
-        else if (Collection.IsGame2 && !Collection.IsGame1)
-        {
-            Collection.IsGame2 = false;
-            Collection.IsGame1 = false;
-            Collection.IsDone = true;
-        }
+        Collection.IsDone = true;
     }
 
     private void CheckDouble()
@@ -561,14 +556,14 @@ public class Flexible : MonoBehaviour
             if (finalChar[i] == finalChar[i + counter])
             {
 
-                Collection.tSameChar = Collection.tSameChar + 1;
-                Collection.wasDoubled.Add(finalChar[i]);
+                tSameChar = tSameChar + 1;
+                wasDoubled.Add(finalChar[i]);
 
             }
 
         }
 
-        Debug.Log(Collection.tSameChar);
+        Debug.Log(tSameChar);
 
         for (int i = 0; i < TotalFloor - counter; i++)
         {
@@ -576,11 +571,11 @@ public class Flexible : MonoBehaviour
             if (tFl[i] == tFl[i + counter])
             {
 
-                Collection.tSameFloor = Collection.tSameFloor + 1;
+                tSameFloor = tSameFloor + 1;
             }
         }
 
-        Debug.Log(Collection.tSameFloor);
+        Debug.Log(tSameFloor);
 
         for (int i = 0; i < TotalSound - counter; i++)
         {
@@ -588,20 +583,20 @@ public class Flexible : MonoBehaviour
             if (SuaraSource[i] == SuaraSource[i + counter])
             {
 
-                Collection.tSameSound = Collection.tSameSound + 1;
+                tSameSound = tSameSound + 1;
             }
         }
 
-        Debug.Log(Collection.tSameSound);
+        Debug.Log(tSameSound);
 
         print("====================");
 
-        IEnumerable<char> distinctSame = Collection.wasDoubled.Distinct();
+        IEnumerable<char> distinctSame = finalChar.Distinct();
 
         foreach (char c in distinctSame)
         {
             Debug.Log(c);
-            Collection.distinctDouble.Add(c);
+            _finalChar.Add(c);
         }
 
     }
@@ -611,12 +606,12 @@ public class Flexible : MonoBehaviour
         if (CharisMatched)
         {
 
-            Collection.tGetChar = Collection.tGetChar + 1;
+            tGetChar = tGetChar + 1;
         }
 
         else
         {
-            Collection._wrong = Collection._wrong + 1;
+            _wrong = _wrong + 1;
         }
 
         CharButton.interactable = false;
@@ -627,12 +622,12 @@ public class Flexible : MonoBehaviour
         if (FloorisMatched)
         {
 
-            Collection.tGetFloor = Collection.tGetFloor + 1;
+            tGetFloor = tGetFloor + 1;
         }
 
         else
         {
-            Collection._wrong = Collection._wrong + 1;
+            _wrong = _wrong + 1;
         }
 
         PostButton.interactable = false;
@@ -644,12 +639,12 @@ public class Flexible : MonoBehaviour
         if (SoundisMatched)
         {
 
-            Collection.tGetSound = Collection.tGetSound + 1;
+            tGetSound = tGetSound + 1;
         }
 
         else
         {
-            Collection._wrong = Collection._wrong + 1;
+            _wrong = _wrong + 1;
         }
 
         SoundButton.interactable = false;
@@ -728,8 +723,8 @@ public class Flexible : MonoBehaviour
     private bool CheckKamus(string kata) //check kata, apakah kata depan nya sesuai dan apakah kata tersebut sesuai kamus data
     {
         char[] c = kata.ToCharArray();
-        int i = kamus.Length;
-        int j = Collection.distinctDouble.Count;
+        int i = Collection.kamus.Length;
+        int j = _finalChar.Count;
         bool isThrough = false;
         bool isMatched = false;
 
@@ -742,20 +737,19 @@ public class Flexible : MonoBehaviour
         {
             for (int y = 0; y < j; y++)
             {
-                if (c[0] != '\0')
-                {
-                    if (c[0] == Collection.distinctDouble[y])
+               
+                    if (c[0] == _finalChar[y])
                     {
                         isThrough = true;
                         y = j;
                     }
-                }
+                
             }
             if (isThrough)
             {
                 for (int x = 0; x < i; x++)
                 {
-                    if (kata == kamus[x])
+                    if (kata == Collection.kamus[x])
                     {
                         isMatched = true;
                         x = i;
@@ -764,10 +758,10 @@ public class Flexible : MonoBehaviour
 
                 if (isMatched)
                 {
-                    int k = System.Array.IndexOf<string>(kamus, kata);
+                    int k = System.Array.IndexOf<string>(Collection.kamus, kata);
                     print(k);
                     print(k + 1);
-                    string d = kamus[k + 1];
+                    string d = Collection.kamus[k + 1];
 
                     if (d == kategori[index])
                     {
@@ -823,13 +817,45 @@ public class Flexible : MonoBehaviour
 
     public void InsertData()
     {
+        Collection._counting = Collection._counting + 1;
+
         Score.totalScore = Score.totalScore + (int)Collection.Skor;
 
         conn.InsertKalimat("Flexible", kalimat.text, FieldSoal);
 
         conn.InsertScore("Flexible N-Back", Score.totalScore);
 
-        SceneManager.LoadScene("Over");
+        if (Collection._count >= perulangan)
+            SceneManager.LoadScene("Over");
+        else
+        {
+            if (Collection.IsGame1 && !Collection.IsGame2)
+            {
+                Collection.IsGame1 = false;
+                Collection.IsGame2 = true;
+                Collection.IsDone = false;
+             
+                print(Collection.IsGame1);
+                print(Collection.IsGame2);
+                print(Collection.IsDone);
+            }
+
+            else if (Collection.IsGame2 && !Collection.IsGame1)
+            {
+                Collection._count = Collection._count + 1;
+                Collection.IsGame1 = true;
+                Collection.IsGame2 = false;
+                Collection.IsDone = false;
+
+                print(Collection.IsGame1);
+                print(Collection.IsGame2);
+                print(Collection.IsDone);
+            }
+
+            SceneManager.LoadScene("Flexible");
+        }
+
+
         print("Posted");
     }
 
