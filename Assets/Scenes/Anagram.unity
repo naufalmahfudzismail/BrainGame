@@ -926,7 +926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &251432693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2420,6 +2420,10 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1924945401}
+    - target: {fileID: 1626128293123132, guid: 13766d28ef849cf44955a766bd02b6f4, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13766d28ef849cf44955a766bd02b6f4, type: 2}
   m_IsPrefabParent: 0
@@ -4668,6 +4672,10 @@ Prefab:
         type: 2}
       propertyPath: UrlGetKataDasar
       value: http://segarbugarindo.com/Items.php
+      objectReference: {fileID: 0}
+    - target: {fileID: 1775957585298634, guid: 7a57421249de3364bbc49c049d6b1412, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7a57421249de3364bbc49c049d6b1412, type: 2}

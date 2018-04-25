@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class Levels
 {
     public static int JLevel = 1;
+    public static string[] kamus;
+    public static string[] kategori;
 }
 
 
@@ -18,7 +20,7 @@ public class Anagram : MonoBehaviour
     public int JumlahMaksimalHuruf = 4;
     public int JumlahLevel = 1;
     private Connection conn;
-    public GameObject Connection;
+    [HideInInspector]public GameObject Connection;
 
     private string soal;
     private string tipeSoal;
@@ -71,8 +73,7 @@ public class Anagram : MonoBehaviour
     [HideInInspector] public InputField txtField;
     [HideInInspector] public InputField txtSentences;
 
-    private string[] kamus;
-    private string[] kategori;
+
 
     private List<char> kar = new List<char>(); //list character pada soal yg terpilih
     private List<char> distract = new List<char>()
@@ -124,26 +125,29 @@ public class Anagram : MonoBehaviour
     IEnumerator Start()
     {
 
+        if (Levels.JLevel == 1)
+        {
+            WWW items = new WWW(conn.getUrlKataDasar());
+            WWW itemsTheme = new WWW(conn.getUrlKategori());
 
-        WWW items = new WWW(conn.getUrlKataDasar());
-        WWW itemsTheme = new WWW(conn.getUrlKategori());
+            StartCoroutine(ShowProgress(items));
 
-        StartCoroutine(ShowProgress(items));
-
-        yield return items;
-        yield return itemsTheme;
+            yield return items;
+            yield return itemsTheme;
 
 
 
-        string itemsString = items.text;
-        string itemsThemeString = itemsTheme.text;
+            string itemsString = items.text;
+            string itemsThemeString = itemsTheme.text;
 
-        kamus = itemsString.Split('|');
-        kategori = itemsThemeString.Split('|');
+            Levels.kamus = itemsString.Split('|');
+            Levels.kategori = itemsThemeString.Split('|');
+            print(Levels.kamus.Length);
+        }
 
-        print(kamus.Length);
+     
         CloseButton();
-        GetSoal(kamus, kategori);
+        GetSoal(Levels.kamus, Levels.kategori);
         StartCoroutine("TextinObject");
 
 
@@ -160,6 +164,13 @@ public class Anagram : MonoBehaviour
             Progress.text = "";
             Time.timeScale = 0;
             isPaused = true;
+        }
+
+        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+        {
+            Time.timeScale = 1;
+            canvasError.SetActive(false);
+            isPaused = false;
         }
 
         Timer();
@@ -205,8 +216,9 @@ public class Anagram : MonoBehaviour
 
         if (LifeRemember == 0 || LifePoint == 0)
         {
-            Score.totalScore = Score.totalScore + score;
-            conn.InsertScore("Anagram", Score.totalScore);
+
+            conn.InsertScoreAna(Akun.username, score);
+            Score.totalScore = score;
             SceneManager.LoadScene("Over");
         }
 
@@ -266,7 +278,7 @@ public class Anagram : MonoBehaviour
 
             random = Random.Range(0, count);
             Soalrandom = soalRand[random];
-            Tipe = kategori[random];
+            Tipe = Levels.kategori[random];
         }
 
         soal = (string)Soalrandom;
@@ -428,7 +440,10 @@ public class Anagram : MonoBehaviour
 
             if (Levels.JLevel == JumlahLevel)
             {
-
+                score = score + 2000;
+                conn.InsertKataAna(Akun.username, soal, kalimat);
+                conn.InsertScoreAna(Akun.username, score);
+                Score.totalScore = score;
                 SceneManager.LoadScene("Over");
                 print("Posted");
             }
@@ -436,14 +451,14 @@ public class Anagram : MonoBehaviour
             else
             {
                 score = score + 2000;
-                Score.totalScore = Score.totalScore + score;
+                conn.InsertKataAna(Akun.username, soal, kalimat);
+                conn.InsertScoreAna(Akun.username, score);
                 Levels.JLevel++;
                 TimerCount = 25;
                 SceneManager.LoadScene("Anagram");
             }
 
-            conn.InsertKalimat("Anagram", kalimat, soal);
-            conn.InsertScore("Anagram", Score.totalScore);
+
         }
 
         else
@@ -463,9 +478,7 @@ public class Anagram : MonoBehaviour
     {
         if (kar.Count == choosen.Count)
         {
-            status.text = "Nice Work!, Tunggu beberapa detik!";
-            yield return new WaitForSeconds(2f);
-            status.text = "";
+            status.text = "Nice Work!";
 
         }
         else
@@ -839,7 +852,6 @@ public class Anagram : MonoBehaviour
 
     public void Test()
     {
-
         if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
             Time.timeScale = 1;

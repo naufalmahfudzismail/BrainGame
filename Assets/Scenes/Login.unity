@@ -1112,6 +1112,26 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Test
       objectReference: {fileID: 0}
+    - target: {fileID: 224270195086124340, guid: 13766d28ef849cf44955a766bd02b6f4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224270195086124340, guid: 13766d28ef849cf44955a766bd02b6f4,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 497.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 224270195086124340, guid: 13766d28ef849cf44955a766bd02b6f4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 13.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224270195086124340, guid: 13766d28ef849cf44955a766bd02b6f4,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 483.6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13766d28ef849cf44955a766bd02b6f4, type: 2}
   m_IsPrefabParent: 0

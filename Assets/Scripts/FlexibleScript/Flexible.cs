@@ -11,8 +11,7 @@ public class Collection
     public static bool IsGame2 = false;
     public static bool IsDone = false;
     public static bool counter = false;
-    public static float Skor;
-    public static int _counting = 0;
+    public static int _counting = 1;
     public static int _count = 0;
     public static string[] kamus; // array kamus data
 }
@@ -63,6 +62,7 @@ public class Flexible : MonoBehaviour
 
     private double _wrong;
     private string FieldSoal;
+    private float Skor;
 
     private bool CharisMatched = false;
     private bool FloorisMatched = false;
@@ -72,6 +72,7 @@ public class Flexible : MonoBehaviour
     private int totalC;
     private int JumlahSoal;
     private float SlideValue;
+    private float accurate;
 
     private string[] kategori = new string[3]
     {
@@ -153,7 +154,7 @@ public class Flexible : MonoBehaviour
     // Use this for initialization
     IEnumerator Start()
     {
-        if (Collection._counting == 0)
+        if (Collection._counting == 1)
         {
             WWW items = new WWW(conn.getUrlKataDasar());
             StartCoroutine(ShowProgress(items));
@@ -173,7 +174,7 @@ public class Flexible : MonoBehaviour
         }
 
         index = Random.Range(0, kategori.Length - 1);
-        Kategori.text = kategori[index];
+        Kategori.text = "Kategori : " +kategori[index];
 
         if (!isPaused)
         {
@@ -181,16 +182,16 @@ public class Flexible : MonoBehaviour
             {
                 StartCoroutine("Loading");
                 canvasLoading.SetActive(false);
-                Round.text = "Round 2";
-                hint.text = "Pada Round 2 : Ingat lah huruf huruf yang muncul ketika huruf itu muncul sama dengan permunculan pada 2 urutan sebelum nya";
-                header.text = "Pada Round 2 : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 2 urutan sebelum nya";
+                Round.text = "Flexible N - 2 Back" + "(" + Collection._counting + ")";
+                hint.text = "Pada Round Flexible N - 2 Back: Ingat lah semua huruf yang muncul";
+                header.text = "Pada Round Flexible N - 2 Back : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 2 urutan sebelum nya";
             }
 
             if (Collection.IsGame1 && !Collection.IsGame2)
             {
-                hint.text = "Pada Round 1 : Ingat lah huruf huruf yang muncul ketika huruf itu muncul sama dengan permunculan pada 1 urutan sebelum nya";
-                header.text = "Pada Round 1 : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
-                Round.text = "Round 1";
+                hint.text = "Pada Round Flexible N - 1 Back: Ingat lah semua huruf yang muncul";
+                header.text = "Pada Round Flexible N - 1 Back: Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
+                Round.text = "Flexible N - 1 Back" + "(" + Collection._counting + ")";
             }
 
             StartCoroutine("SetTask");
@@ -226,6 +227,13 @@ public class Flexible : MonoBehaviour
             isPaused = true;
         }
 
+        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+        {
+            Time.timeScale = 1;
+            canvasError.SetActive(false);
+            isPaused = false;
+        }
+
 
         charScore.text = tGetChar.ToString();
         postScore.text = tGetFloor.ToString();
@@ -233,16 +241,17 @@ public class Flexible : MonoBehaviour
 
         if (Collection.IsDone)
         {
-            float accurate = (float)(((tGetChar + tGetFloor + tGetSound) - _wrong) / (tSameChar + tSameFloor + tSameSound)) * 100;
+            accurate = (float)(((tGetChar + tGetFloor + tGetSound) - _wrong) / (tSameChar + tSameFloor + tSameSound));
+            float accurates = accurate * 100;
             int Total = (int)(accurate * 1000) - (int)(_wrong * 100);
 
             if (Total < 0)
                 Total = 0;
 
             Scores.text = "Score Game : " + (Total);
-            Akurasi.text = "Ketepatan : " + accurate + " %";
+            Akurasi.text = "Ketepatan : " + accurates + " %";
             Wrong.text = "Kesalahan : " + _wrong;
-            Collection.Skor = Collection.Skor + Total;
+            Skor = Skor + Total;
 
             canvasPlay.SetActive(false);
             canvasField.SetActive(true);
@@ -670,7 +679,7 @@ public class Flexible : MonoBehaviour
         if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
         {
             result[0].text = "Benar";
-            Collection.Skor = Collection.Skor + 100;
+            Skor = Skor + 100;
             InputKata[0].readOnly = true;
         }
 
@@ -691,7 +700,7 @@ public class Flexible : MonoBehaviour
         if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
         {
             result[1].text = "Benar";
-            Collection.Skor = Collection.Skor + 100;
+            Skor = Skor + 100;
             InputKata[1].readOnly = true;
         }
         else
@@ -709,7 +718,7 @@ public class Flexible : MonoBehaviour
         if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
         {
             result[2].text = "Benar";
-            Collection.Skor = Collection.Skor + 100;
+            Skor = Skor + 100;
             InputKata[2].readOnly = true;
         }
         else
@@ -797,7 +806,7 @@ public class Flexible : MonoBehaviour
             kalimat.text = kalimat.text.ToUpper();
             if (kalimat.text.Contains(InputKata[0].text) && kalimat.text.Contains(InputKata[1].text) && kalimat.text.Contains(InputKata[2].text))
             {
-                Collection.Skor = Collection.Skor + 500;
+                Skor = Skor + 500;
                 ResultCek.text = "Benar!";
                 InsertButton.SetActive(true);
                 kalimat.readOnly = true;
@@ -808,9 +817,6 @@ public class Flexible : MonoBehaviour
                 ResultCek.text = "Kalimat belum sesuai";
                 kalimat.text = "";
 
-                StartCoroutine("Delay");
-                ResultCek.text = "Tap here";
-
             }
         }
     }
@@ -819,22 +825,28 @@ public class Flexible : MonoBehaviour
     {
         Collection._counting = Collection._counting + 1;
 
-        Score.totalScore = Score.totalScore + (int)Collection.Skor;
-
-        conn.InsertKalimat("Flexible", kalimat.text, FieldSoal);
-
-        conn.InsertScore("Flexible N-Back", Score.totalScore);
-
         if (Collection._count >= perulangan)
+        {
+            Score.totalScore = (int)Skor;
             SceneManager.LoadScene("Over");
+        }
         else
         {
             if (Collection.IsGame1 && !Collection.IsGame2)
             {
+
+                int score = (int)Skor;
+
+
                 Collection.IsGame1 = false;
                 Collection.IsGame2 = true;
                 Collection.IsDone = false;
-             
+
+                conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
+                conn.InsertScoreFlx1(Akun.username, score, Akurasi.text);
+
+
+
                 print(Collection.IsGame1);
                 print(Collection.IsGame2);
                 print(Collection.IsDone);
@@ -843,13 +855,22 @@ public class Flexible : MonoBehaviour
             else if (Collection.IsGame2 && !Collection.IsGame1)
             {
                 Collection._count = Collection._count + 1;
+
+                int score = (int)Skor;
+
                 Collection.IsGame1 = true;
                 Collection.IsGame2 = false;
                 Collection.IsDone = false;
 
+                conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
+                conn.InsertScoreFlx2(Akun.username, score, Akurasi.text);
+
                 print(Collection.IsGame1);
                 print(Collection.IsGame2);
                 print(Collection.IsDone);
+
+
+
             }
 
             SceneManager.LoadScene("Flexible");

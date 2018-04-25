@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class Titles
 {
     public static string title;
+    public static bool isFlexible = false;
+    public static bool isAnagram = false;
 }
 
 
@@ -25,6 +27,7 @@ public class Opening : MonoBehaviour
     [HideInInspector] public Text pass;
     [HideInInspector] public Text mark;
     [HideInInspector] public GameObject conn;
+
     private Connection con;
     string url;
 
@@ -49,6 +52,13 @@ public class Opening : MonoBehaviour
             isPaused = true;
         }
 
+        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+        {
+            Time.timeScale = 1;
+            canvasError.SetActive(false);
+            isPaused = false;
+        }
+
     }
 
     public void Login()
@@ -60,7 +70,14 @@ public class Opening : MonoBehaviour
 
     public void Regist()
     {
-        Titles.title = Title.text;
+        if (Title.text.ToString() == "Flexible N-Back")
+            Titles.isFlexible = true;
+        else if (Title.text.ToString() == "Anagram")
+            Titles.isAnagram = true;
+
+        print(Titles.isFlexible);
+        print(Titles.isAnagram);
+
         SceneManager.LoadScene("Register");
     }
 
@@ -96,7 +113,7 @@ public class Opening : MonoBehaviour
         }
         else
         {
-            mark.text = "Username dan Password Salah!";
+            mark.text = "Username atau Password Salah!";
         }
     }
 

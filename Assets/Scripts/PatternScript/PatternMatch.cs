@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+public class Score
+{
+    public static int totalScore = 0;
+}
+
 public class Tile
 {
     public GameObject tileObject;
@@ -32,6 +37,7 @@ public class Tile
 public class PatternMatch : MonoBehaviour
 {
     private Connection conn;
+    private bool isPaused = false;
     public GameObject Connection;
 
     GameObject tile1 = null;
@@ -67,6 +73,10 @@ public class PatternMatch : MonoBehaviour
     private bool renewBoard = false;
     private bool acak = false;
 
+    public Text error;
+    public Text Progress;
+    public GameObject canvasError;
+
 
     private void Awake()
     {
@@ -79,7 +89,7 @@ public class PatternMatch : MonoBehaviour
 
         TimerCount = WaktuBatas;
 
-  
+
         int jumlah = (baris * kolom) / 3;
 
         for (int i = 0; i < jumlah; i++)
@@ -128,6 +138,22 @@ public class PatternMatch : MonoBehaviour
 
     void Update()
     {
+
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            canvasError.SetActive(true);
+            error.text = "Network Connection Unavailable";
+            Progress.text = "";
+            Time.timeScale = 0;
+            isPaused = true;
+        }
+
+        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
+        {
+            Time.timeScale = 1;
+            canvasError.SetActive(false);
+            isPaused = false;
+        }
 
         CheckGrid();
         if (Input.GetMouseButtonDown(0))
@@ -183,7 +209,7 @@ public class PatternMatch : MonoBehaviour
 
                 }
 
-               
+
 
             }
 
@@ -199,18 +225,18 @@ public class PatternMatch : MonoBehaviour
 
         countDown.text = minutes + ":" + seconds;
 
-    
+
 
         Timer();
 
         Over();
 
-        if (TimerCount == 0)
+        if (TimerCount == 0 && skor >= BatasSkorPerLevel)
         {
             skor = 0;
         }
-     
-        
+
+
 
     }
 
@@ -518,9 +544,9 @@ public class PatternMatch : MonoBehaviour
 
     private void Over()
     {
-        if (TimerCount == 0 && skor <= BatasSkorPerLevel)
+        if (TimerCount == 0 && skor < BatasSkorPerLevel)
         {
-            conn.InsertScore("Pattern 3 Match", Score.totalScore);
+            conn.InsertScore3Col(Akun.username, Score.totalScore);
             SceneManager.LoadScene("Over");
         }
 

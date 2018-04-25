@@ -23,7 +23,7 @@ public class Daftar : MonoBehaviour
 
     void Start()
     {
-        print(Titles.title);
+       
         con = conn.GetComponent<Connection>();
         url = con.UrlRegist;
     }
@@ -69,11 +69,9 @@ public class Daftar : MonoBehaviour
         {
             mark.text = "Sukses daftar !, silhkan login kembali";
 
-            yield return new WaitForSeconds(5f);
-
-            if (Titles.title == "Flexible N-back")
+            if (Titles.isFlexible)
                 SceneManager.LoadScene("Login");
-            if (Titles.title == "Anagram")
+            else if (Titles.isAnagram)
                 SceneManager.LoadScene("Login_Anagram");
         }
     }
