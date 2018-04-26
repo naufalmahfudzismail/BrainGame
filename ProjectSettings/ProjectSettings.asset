@@ -638,9 +638,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: cc78c33c-92a6-4c49-9475-eb9f09fdbf3a
-  projectName: BrainGame
-  organizationId: eruvatar
+  cloudProjectId: 
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
