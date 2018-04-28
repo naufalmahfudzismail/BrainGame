@@ -27,21 +27,24 @@ public class Opening : MonoBehaviour
     [HideInInspector] public Text pass;
     [HideInInspector] public Text mark;
     [HideInInspector] public GameObject conn;
+    public InputField inputpass;
+    string passw;
 
     private Connection con;
     string url;
 
     void Awake()
     {
+        Screen.SetResolution(600, 1024, true);
         print(Title.text);
         con = conn.GetComponent<Connection>();
-        url = con.UrlLogin;
+        url = con.UrlLogin;    
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        passw = inputpass.text;
 
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
@@ -70,9 +73,9 @@ public class Opening : MonoBehaviour
 
     public void Regist()
     {
-        if (Title.text.ToString() == "Flexible N-Back")
+        if (Title.text == "Flexible N-Back")
             Titles.isFlexible = true;
-        else if (Title.text.ToString() == "Anagram")
+        else if (Title.text == "Anagram")
             Titles.isAnagram = true;
 
         print(Titles.isFlexible);
@@ -96,24 +99,24 @@ public class Opening : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("username", user.text);
-        form.AddField("password", pass.text);
+        form.AddField("password", passw);
         WWW www = new WWW(url, form);
         yield return www;
         string data = www.text;
         print(data);
 
-        if (data == "benar")
+        if (data == "Selamat datang")
         {
             Akun.username = user.text;
             Akun.password = pass.text;
             if (Title.text == "Flexible N-Back")
-                SceneManager.LoadScene("Flexible");
+                SceneManager.LoadScene("PreFlexible");
             if (Title.text == "Anagram")
                 SceneManager.LoadScene("Anagram");
         }
         else
         {
-            mark.text = "Username atau Password Salah!";
+            mark.text = data;
         }
     }
 

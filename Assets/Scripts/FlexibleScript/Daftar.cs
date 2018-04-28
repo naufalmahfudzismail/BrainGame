@@ -21,6 +21,10 @@ public class Daftar : MonoBehaviour
     private Connection con;
     string url;
 
+    private void Awake()
+    {
+        Screen.SetResolution(600, 1024, true);
+    }
     void Start()
     {
        

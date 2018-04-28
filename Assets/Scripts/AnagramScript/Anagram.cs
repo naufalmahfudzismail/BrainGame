@@ -19,6 +19,8 @@ public class Anagram : MonoBehaviour
 
     public int JumlahMaksimalHuruf = 4;
     public int JumlahLevel = 1;
+    public int KesempatanMenyusunKata = 5;
+    public int KesempatanMengingatHuruf = 5;
     private Connection conn;
     [HideInInspector]public GameObject Connection;
 
@@ -26,13 +28,10 @@ public class Anagram : MonoBehaviour
     private string tipeSoal;
     private string choosenSoal;
 
-    private int LifePoint = 5;
-    private int LifeRemember = 5;
+   
     private int score;
     private int[] randomArray = new int[12];
     private int desiredLength;
-
-
     private bool isPlay = false;
     private bool isRemember = false;
     private bool isDone = false;
@@ -69,9 +68,9 @@ public class Anagram : MonoBehaviour
     [HideInInspector] public Text Round;
     [HideInInspector] public Text error;
     [HideInInspector] public Text Progress;
-
     [HideInInspector] public InputField txtField;
     [HideInInspector] public InputField txtSentences;
+    [HideInInspector] public Text TxtBtnError;
 
 
 
@@ -157,28 +156,30 @@ public class Anagram : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+        }
+        else if (!isPaused)
+        {
+            Time.timeScale = 1f;
+        }
+
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             canvasError.SetActive(true);
             error.text = "Network Connection Unavailable";
             Progress.text = "";
-            Time.timeScale = 0;
+            TxtBtnError.text = "Retry";
             isPaused = true;
-        }
-
-        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
-        {
-            Time.timeScale = 1;
-            canvasError.SetActive(false);
-            isPaused = false;
         }
 
         Timer();
 
         Round.text = "Round : " + Levels.JLevel;
 
-        Hp.text = "Kesempatan menyusun : " + LifePoint.ToString();
-        lifecount.text = "Chance : " + LifeRemember.ToString();
+        Hp.text = "Kesempatan menyusun : " + KesempatanMenyusunKata.ToString();
+        lifecount.text = "Chance : " + KesempatanMengingatHuruf.ToString();
         ScoreWhile.text = "Score sementara :" + score;
 
         if (isRemember)
@@ -214,7 +215,7 @@ public class Anagram : MonoBehaviour
             Clue.text = tipeSoal.ToString();
         }
 
-        if (LifeRemember == 0 || LifePoint == 0)
+        if (KesempatanMengingatHuruf == 0 || KesempatanMenyusunKata == 0)
         {
 
             conn.InsertScoreAna(Akun.username, score);
@@ -406,17 +407,17 @@ public class Anagram : MonoBehaviour
             if (Jawaban == Soal)
             {
                 Result.text = "Selamat, Jawaban anda benar!";
-                score = score + (1000 * LifePoint);
+                score = score + (1000 * KesempatanMenyusunKata);
                 TxtSentence.SetActive(true);
                 SendButton.SetActive(true);
             }
             else
             {
                 Result.text = "Maaf, Jawaban anda Salah!";
-                LifePoint--;
+                KesempatanMenyusunKata--;
             }
 
-            if (LifePoint == 0)
+            if (KesempatanMenyusunKata == 0)
             {
 
                 Result.text = "Maaf, Anda Gagal!";
@@ -515,7 +516,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
         }
 
@@ -545,7 +546,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -575,7 +576,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
         }
 
@@ -604,7 +605,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -634,7 +635,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -664,7 +665,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -694,7 +695,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -724,7 +725,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -754,7 +755,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -784,7 +785,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -814,7 +815,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
         }
 
@@ -843,7 +844,7 @@ public class Anagram : MonoBehaviour
 
         else
         {
-            LifeRemember = LifeRemember - 1;
+            KesempatanMengingatHuruf = KesempatanMengingatHuruf - 1;
             StartCoroutine("Delays");
 
         }
@@ -854,9 +855,22 @@ public class Anagram : MonoBehaviour
     {
         if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
-            Time.timeScale = 1;
             canvasError.SetActive(false);
             isPaused = false;
         }
+        else
+        {
+            Progress.text = "No Network Connection!";
+        }
     }
+
+    public void Paused()
+    {
+        canvasError.SetActive(true);
+        error.text = "Game is Paused";
+        Progress.text = "";
+        TxtBtnError.text = "Resume";
+        isPaused = true;
+    }
+
 }

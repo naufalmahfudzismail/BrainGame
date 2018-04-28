@@ -8,8 +8,13 @@ public class OverScript : MonoBehaviour {
     public Text score;
     public Button send;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private void Awake()
+    {
+        Screen.SetResolution(600, 1024, true);
+    }
+
+    void Start () {
 
         score.text = Score.totalScore.ToString();
     }

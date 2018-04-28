@@ -7,13 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class Collection
 {
-    public static bool IsGame1 = true;
+    public static bool IsGame1 = false;
     public static bool IsGame2 = false;
     public static bool IsDone = false;
     public static bool counter = false;
-    public static int _counting = 1;
-    public static int _count = 0;
+    public static int ulang = 0;
+    public static int _count = 1;
     public static string[] kamus; // array kamus data
+    public static int Score = 0;
 }
 
 public class Flexible : MonoBehaviour
@@ -25,7 +26,7 @@ public class Flexible : MonoBehaviour
 
     public int JumlahCharacter = 40;
     public float WaktuPerStep = 2f;
-    public int perulangan = 2;
+    public int perulangan;
 
     [HideInInspector] public Button CharButton;
     [HideInInspector] public Button PostButton;
@@ -59,6 +60,7 @@ public class Flexible : MonoBehaviour
     [HideInInspector] public Text hint;
     [HideInInspector] public Text header;
     [HideInInspector] public Text Wrong;
+    [HideInInspector] public Text TxtBtnError;
 
     private double _wrong;
     private string FieldSoal;
@@ -88,6 +90,7 @@ public class Flexible : MonoBehaviour
     private double tSameFloor;
     private double tSameSound;
 
+    float accurates;
     int index;
 
     private string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -111,6 +114,7 @@ public class Flexible : MonoBehaviour
 
 
         ObjectActive();
+        perulangan = Collection.ulang + 1;
 
         if (JumlahCharacter % 2 != 0)
         {
@@ -129,7 +133,6 @@ public class Flexible : MonoBehaviour
         {
             error.text = "Network Connection Unavailable";
             Progress.text = "";
-            Time.timeScale = 0;
             isPaused = true;
         }
 
@@ -154,7 +157,7 @@ public class Flexible : MonoBehaviour
     // Use this for initialization
     IEnumerator Start()
     {
-        if (Collection._counting == 1)
+        if (Collection._count == 1)
         {
             WWW items = new WWW(conn.getUrlKataDasar());
             StartCoroutine(ShowProgress(items));
@@ -174,34 +177,31 @@ public class Flexible : MonoBehaviour
         }
 
         index = Random.Range(0, kategori.Length - 1);
-        Kategori.text = "Kategori : " +kategori[index];
+        Kategori.text = "Kategori : " + kategori[index];
 
-        if (!isPaused)
+
+        if (Collection.IsGame2)
         {
-            if (Collection.IsGame2 && !Collection.IsGame1)
-            {
-                StartCoroutine("Loading");
-                canvasLoading.SetActive(false);
-                Round.text = "Flexible N - 2 Back" + "(" + Collection._counting + ")";
-                hint.text = "Pada Round Flexible N - 2 Back: Ingat lah semua huruf yang muncul";
-                header.text = "Pada Round Flexible N - 2 Back : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 2 urutan sebelum nya";
-            }
-
-            if (Collection.IsGame1 && !Collection.IsGame2)
-            {
-                hint.text = "Pada Round Flexible N - 1 Back: Ingat lah semua huruf yang muncul";
-                header.text = "Pada Round Flexible N - 1 Back: Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
-                Round.text = "Flexible N - 1 Back" + "(" + Collection._counting + ")";
-            }
-
-            StartCoroutine("SetTask");
-            CheckDouble();
+            StartCoroutine("Loading");
+            canvasLoading.SetActive(false);
+            Round.text = "Flexible N - 2 Back" + "(" + Collection._count + ")";
+            header.text = "Pada Round Flexible N - 2 Back : Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 2 urutan sebelum nya";
         }
+
+        else if (Collection.IsGame1)
+        {
+           
+            header.text = "Pada Round Flexible N - 1 Back: Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
+            Round.text = "Flexible N - 1 Back" + "(" + Collection._count + ")";
+        }
+
+        StartCoroutine("SetTask");
+        CheckDouble();
+
     }
 
     private void ObjectActive()
     {
-        canvasLoading.SetActive(false);
         canvasPlay.SetActive(true);
         canvasField.SetActive(false);
         Kalimat.SetActive(false);
@@ -218,20 +218,22 @@ public class Flexible : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+        }
+        else if (!isPaused)
+        {
+            Time.timeScale = 1f;
+        }
+
         if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             canvasError.SetActive(true);
             error.text = "Network Connection Unavailable";
             Progress.text = "";
-            Time.timeScale = 0;
+            TxtBtnError.text = "Retry";
             isPaused = true;
-        }
-
-        if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
-        {
-            Time.timeScale = 1;
-            canvasError.SetActive(false);
-            isPaused = false;
         }
 
 
@@ -242,16 +244,17 @@ public class Flexible : MonoBehaviour
         if (Collection.IsDone)
         {
             accurate = (float)(((tGetChar + tGetFloor + tGetSound) - _wrong) / (tSameChar + tSameFloor + tSameSound));
-            float accurates = accurate * 100;
-            int Total = (int)(accurate * 1000) - (int)(_wrong * 100);
+            accurates = accurate * 100;
+            int Total = (int)(accurate * 1000) - (int)(_wrong * 50);
 
             if (Total < 0)
                 Total = 0;
 
-            Scores.text = "Score Game : " + (Total);
             Akurasi.text = "Ketepatan : " + accurates + " %";
             Wrong.text = "Kesalahan : " + _wrong;
-            Skor = Skor + Total;
+            Skor = Total;
+            Scores.text = "Score Game : " + Skor;
+
 
             canvasPlay.SetActive(false);
             canvasField.SetActive(true);
@@ -482,6 +485,7 @@ public class Flexible : MonoBehaviour
 
     IEnumerator SetTask()
     {
+        yield return new WaitForSeconds(1f);
 
         GatherChar();
         RandomingPosition();
@@ -490,8 +494,12 @@ public class Flexible : MonoBehaviour
 
         if (Collection.IsGame1)
             counter = 1;
-        if (Collection.IsGame2)
+        else if (Collection.IsGame2)
             counter = 2;
+        else
+        {
+            counter = 1;
+        }
 
 
         int JtS = JumlahCharacter + (int)(JumlahCharacter / 2);
@@ -673,58 +681,67 @@ public class Flexible : MonoBehaviour
 
     public void Check()
     {
-        InputKata[0].text = InputKata[0].text.ToUpper();
-        bool isMatched = CheckKamus(InputKata[0].text);
-
-        if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
+        if (InputKata[0].text != null || InputKata[0].text == "")
         {
-            result[0].text = "Benar";
-            Skor = Skor + 100;
-            InputKata[0].readOnly = true;
-        }
+            InputKata[0].text = InputKata[0].text.ToUpper();
+            bool isMatched = CheckKamus(InputKata[0].text);
+
+            if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
+            {
+                result[0].text = "Benar";
+                Skor = Skor + 100;
+                InputKata[0].readOnly = true;
+            }
 
 
-        else
-        {
-            result[0].text = "Salah";
-            InputKata[0].text = "";
+            else
+            {
+                result[0].text = "Salah";
+                InputKata[0].text = "";
+            }
         }
 
     }
 
     public void Check2()
     {
-        InputKata[1].text = InputKata[1].text.ToUpper();
-        bool isMatched = CheckKamus(InputKata[1].text);
+        if (InputKata[1].text != null || InputKata[1].text == "")
+        {
+            InputKata[1].text = InputKata[1].text.ToUpper();
+            bool isMatched = CheckKamus(InputKata[1].text);
 
-        if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
-        {
-            result[1].text = "Benar";
-            Skor = Skor + 100;
-            InputKata[1].readOnly = true;
-        }
-        else
-        {
-            result[1].text = "Salah";
-            InputKata[1].text = "";
+            if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
+            {
+                result[1].text = "Benar";
+                Skor = Skor + 100;
+                InputKata[1].readOnly = true;
+            }
+            else
+            {
+                result[1].text = "Salah";
+                InputKata[1].text = "";
+            }
         }
     }
 
     public void Check3()
     {
-        InputKata[2].text = InputKata[2].text.ToUpper();
-        bool isMatched = CheckKamus(InputKata[2].text);
+        if (InputKata[2].text != null || InputKata[2].text == "")
+        {
+            InputKata[2].text = InputKata[2].text.ToUpper();
+            bool isMatched = CheckKamus(InputKata[2].text);
 
-        if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
-        {
-            result[2].text = "Benar";
-            Skor = Skor + 100;
-            InputKata[2].readOnly = true;
-        }
-        else
-        {
-            result[2].text = "Salah";
-            InputKata[2].text = "";
+            if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
+            {
+                result[2].text = "Benar";
+                Skor = Skor + 100;
+                InputKata[2].readOnly = true;
+            }
+            else
+            {
+                result[2].text = "Salah";
+                InputKata[2].text = "";
+            }
         }
 
     }
@@ -746,13 +763,13 @@ public class Flexible : MonoBehaviour
         {
             for (int y = 0; y < j; y++)
             {
-               
-                    if (c[0] == _finalChar[y])
-                    {
-                        isThrough = true;
-                        y = j;
-                    }
-                
+
+                if (c[0] == _finalChar[y])
+                {
+                    isThrough = true;
+                    y = j;
+                }
+
             }
             if (isThrough)
             {
@@ -823,7 +840,23 @@ public class Flexible : MonoBehaviour
 
     public void InsertData()
     {
-        Collection._counting = Collection._counting + 1;
+        Collection._count = Collection._count + 1;
+        int score = (int)Skor;
+        if (Collection.IsGame1)
+        {
+            Collection.IsGame1 = false;
+            conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
+            conn.InsertScoreFlx1(Akun.username, score, accurates.ToString());
+        }
+
+        else if (Collection.IsGame2)
+        {
+            Collection.IsGame2 = false;
+            conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
+            conn.InsertScoreFlx2(Akun.username, score, accurates.ToString());
+        }
+
+        Collection.IsDone = false;
 
         if (Collection._count >= perulangan)
         {
@@ -832,52 +865,8 @@ public class Flexible : MonoBehaviour
         }
         else
         {
-            if (Collection.IsGame1 && !Collection.IsGame2)
-            {
-
-                int score = (int)Skor;
-
-
-                Collection.IsGame1 = false;
-                Collection.IsGame2 = true;
-                Collection.IsDone = false;
-
-                conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
-                conn.InsertScoreFlx1(Akun.username, score, Akurasi.text);
-
-
-
-                print(Collection.IsGame1);
-                print(Collection.IsGame2);
-                print(Collection.IsDone);
-            }
-
-            else if (Collection.IsGame2 && !Collection.IsGame1)
-            {
-                Collection._count = Collection._count + 1;
-
-                int score = (int)Skor;
-
-                Collection.IsGame1 = true;
-                Collection.IsGame2 = false;
-                Collection.IsDone = false;
-
-                conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
-                conn.InsertScoreFlx2(Akun.username, score, Akurasi.text);
-
-                print(Collection.IsGame1);
-                print(Collection.IsGame2);
-                print(Collection.IsDone);
-
-
-
-            }
-
-            SceneManager.LoadScene("Flexible");
+            SceneManager.LoadScene("PreFlexible");
         }
-
-
-        print("Posted");
     }
 
     IEnumerator Delay()
@@ -889,11 +878,25 @@ public class Flexible : MonoBehaviour
     {
         if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
-            Time.timeScale = 1;
             canvasError.SetActive(false);
             isPaused = false;
         }
+        else
+        {
+            Progress.text = "No Network Connection!";
+        }
     }
+
+    public void Paused()
+    {
+        canvasError.SetActive(true);
+        error.text = "Game is Paused";
+        Progress.text = "";
+        TxtBtnError.text = "Resume";
+        isPaused = true;
+    }
+
+    
 
 
 
