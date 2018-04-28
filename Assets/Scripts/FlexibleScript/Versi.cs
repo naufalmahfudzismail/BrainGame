@@ -44,7 +44,11 @@ public class Versi : MonoBehaviour
         {
             try
             {
-                Collection.ulang = System.Int32.Parse(ulang.text);
+                int u = System.Int32.Parse(ulang.text);
+                if (u < 0)
+                    u = u * -1;
+      
+                Collection.ulang = u;
                 SceneManager.LoadScene("Flexible");
 
             }
