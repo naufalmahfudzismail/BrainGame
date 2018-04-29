@@ -43,7 +43,7 @@ MonoBehaviour:
     y: 0
     width: 1366
     height: 685
-  m_MinSize: {x: 950, y: 542}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -108,8 +108,8 @@ MonoBehaviour:
     y: 30
     width: 1366
     height: 635
-  m_MinSize: {x: 917, y: 492}
-  m_MaxSize: {x: 22012, y: 14042}
+  m_MinSize: {x: 913, y: 492}
+  m_MaxSize: {x: 22008, y: 14042}
   vertical: 0
   controlID: 11
 --- !u!114 &6
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 130
+  controlID: 126
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -233,8 +233,8 @@ MonoBehaviour:
     y: 0
     width: 341
     height: 635
-  m_MinSize: {x: 204, y: 221}
-  m_MaxSize: {x: 4004, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 12}
@@ -336,7 +336,7 @@ MonoBehaviour:
       width: 600
       height: 1062.908
     m_MinimalGUI: 1
-  m_defaultScale: 0.56166667
+  m_defaultScale: 1
   m_TargetTexture: {fileID: 0}
   m_CurrentColorSpace: 0
   m_LastWindowPixelSize: {x: 337, y: 614}
@@ -372,23 +372,23 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 52090000
+    m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 98fbffff00000000522f0000e22f0000ec2f0000be300000
+    m_ExpandedIDs: 5c1effff521fffffa821ffffb021ffffba21fffff621ffff4022ffff7646fffffe49fffff472ffff6092ffff8694ffffe89dffffcab8ffff3ad7ffff26d8ffff7cdaffff86daffffc2daffff0cdbffff98fbffff000000003840000018460000ea460000ec460000fe4f0000206200009c6200002c63000008640000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: InputKata1
-      m_OriginalName: InputKata1
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 12478
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 7}
     m_SearchString: 
@@ -436,18 +436,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts/FlexibleScript
+    - Assets/Scenes
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/FlexibleScript
+  - Assets/Scenes
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\All Code\Unity Project (Games)\BrainGame-Master
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 6}
-    m_SelectedIDs: 8c2b0000
-    m_LastClickedID: 11148
+    m_SelectedIDs: 542c0000
+    m_LastClickedID: 11348
     m_ExpandedIDs: 00000000d8290000282a0000882b0000542c0000222e000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -586,14 +586,14 @@ MonoBehaviour:
     height: 614
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SceneLighting: 1
-  lastFramingTime: 608.6143341494609
+  lastFramingTime: 3553.7695473819917
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 2.5859957, y: -7.3034782, z: 90}
+    m_Target: {x: 0, y: 0.20214856, z: 90}
     speed: 2
-    m_Value: {x: 2.5859957, y: -7.3034782, z: 90}
+    m_Value: {x: 0, y: 0.20214856, z: 90}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -621,9 +621,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 5.8261924
+    m_Target: 3.2968535
     speed: 2
-    m_Value: 5.8261924
+    m_Value: 3.2968535
   m_Ortho:
     m_Target: 1
     speed: 2

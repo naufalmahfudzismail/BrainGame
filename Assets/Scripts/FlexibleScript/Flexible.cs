@@ -26,7 +26,7 @@ public class Flexible : MonoBehaviour
 
     public int JumlahCharacter = 40;
     public float WaktuPerStep = 2f;
-    public int perulangan;
+    public int perulangan = 0;
 
     [HideInInspector] public Button CharButton;
     [HideInInspector] public Button PostButton;
@@ -845,7 +845,7 @@ public class Flexible : MonoBehaviour
 
     public void InsertData()
     {
-        Collection._count = Collection._count + 1;
+        
         int score = (int)Skor;
         if (Collection.IsGame1)
         {
@@ -865,12 +865,13 @@ public class Flexible : MonoBehaviour
 
         if (Collection._count >= perulangan)
         {
-            Score.totalScore = (int)Skor;
+           
             SceneManager.LoadScene("Over");
         }
         else
         {
             SceneManager.LoadScene("PreFlexible");
+            Collection._count = Collection._count + 1;
         }
     }
 

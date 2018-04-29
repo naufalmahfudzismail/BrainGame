@@ -40,6 +40,7 @@ public class Versi : MonoBehaviour
     {
         Collection.IsGame2 = false;
         Collection.IsGame1 = true;
+
         if (Collection._count == 1)
         {
             try

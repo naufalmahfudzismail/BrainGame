@@ -228,7 +228,7 @@ Prefab:
     - target: {fileID: 224355429356590728, guid: 40770662e39e0424488a65194ab6089e,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 16
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 40770662e39e0424488a65194ab6089e, type: 2}
@@ -3486,7 +3486,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: w
+  m_Text: 
 --- !u!222 &930855003
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4044,7 +4044,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 1
@@ -6291,7 +6291,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 1
@@ -6539,7 +6539,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: w
+  m_Text: 
 --- !u!222 &1577463679
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6937,7 +6937,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: w
+  m_Text: 
 --- !u!222 &1737442756
 CanvasRenderer:
   m_ObjectHideFlags: 0
