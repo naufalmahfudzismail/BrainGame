@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A923F15E-F078-30CD-CD1F-62BE0447A6A8}</ProjectGuid>
+    <ProjectGuid>{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -304,9 +304,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="BrainGame-master.csproj">
-      <Project>{265C2100-A36D-0B40-9AC7-DCF9F319FB92}</Project>
-      <Name>BrainGame-master</Name>
+    <ProjectReference Include="BrainGame-Master.csproj">
+      <Project>{5AD52772-889E-FE01-A8C7-4F5A08BADF62}</Project>
+      <Name>BrainGame-Master</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

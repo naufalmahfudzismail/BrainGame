@@ -5,30 +5,30 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PatternMatch.unity
     guid: 188128f06df6e364fab7159cc6b63e55
-  - enabled: 1
-    path: Assets/Scenes/Anagram.unity
-    guid: c4df3622376484e47b0a2f390aa072aa
-  - enabled: 1
-    path: Assets/Scenes/Flexible.unity
-    guid: fa866212ef60e6c40a3b237cb67888fe
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Over.unity
     guid: 79e0b4c217cff44469949880f5d36b1a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Login.unity
     guid: 0d190f4c6adef3444a4e837ef0cd9384
-  - enabled: 1
-    path: Assets/Scenes/Register.unity
-    guid: 9f906484b6021a74e8fa18f7e5857ff6
-  - enabled: 0
-    path: 
-    guid: 4a0514878639e914490dfecf64c546ae
   - enabled: 1
     path: Assets/Scenes/Login_Anagram.unity
     guid: 801384c53a7abfb428852331ee56ea60
   - enabled: 1
+    path: Assets/Scenes/Register.unity
+    guid: 9f906484b6021a74e8fa18f7e5857ff6
+  - enabled: 1
+    path: Assets/Scenes/Anagram.unity
+    guid: c4df3622376484e47b0a2f390aa072aa
+  - enabled: 0
     path: Assets/Scenes/PreFlexible.unity
     guid: e80e6c8b35d6be546a886c7ba8e55ebe
+  - enabled: 0
+    path: Assets/Scenes/Flexible.unity
+    guid: fa866212ef60e6c40a3b237cb67888fe
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainGame-master", "BrainGame-master.csproj", "{265C2100-A36D-0B40-9AC7-DCF9F319FB92}"
+VisualStudioVersion = 15.0.27428.2043
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainGame-Master", "BrainGame-Master.csproj", "{265C2100-A36D-0B40-9AC7-DCF9F319FB92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainGame-master.Editor", "BrainGame-master.Editor.csproj", "{A923F15E-F078-30CD-CD1F-62BE0447A6A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainGame-Master.Editor", "BrainGame-Master.Editor.csproj", "{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,12 +17,15 @@ Global
 		{265C2100-A36D-0B40-9AC7-DCF9F319FB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{265C2100-A36D-0B40-9AC7-DCF9F319FB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{265C2100-A36D-0B40-9AC7-DCF9F319FB92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A923F15E-F078-30CD-CD1F-62BE0447A6A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A923F15E-F078-30CD-CD1F-62BE0447A6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A923F15E-F078-30CD-CD1F-62BE0447A6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A923F15E-F078-30CD-CD1F-62BE0447A6A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A3A81A-E781-9CEC-30BA-F40F33903D0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFBB5228-CF70-4F2C-BD9B-BDFD04013064}
 	EndGlobalSection
 EndGlobal

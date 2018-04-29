@@ -195,8 +195,10 @@ public class Flexible : MonoBehaviour
             Round.text = "Flexible N - 1 Back" + "(" + Collection._count + ")";
         }
 
+       
         StartCoroutine("SetTask");
         CheckDouble();
+
 
     }
 
@@ -485,11 +487,12 @@ public class Flexible : MonoBehaviour
 
     IEnumerator SetTask()
     {
-        yield return new WaitForSeconds(1f);
-
         GatherChar();
         RandomingPosition();
         RandomingSound();
+
+        yield return new WaitForSeconds(1f);
+
         int counter = 1;
 
         if (Collection.IsGame1)
@@ -563,8 +566,10 @@ public class Flexible : MonoBehaviour
 
         if (Collection.IsGame1)
             counter = 1;
-        if (Collection.IsGame2)
+        else if (Collection.IsGame2)
             counter = 2;
+        else
+            counter = 1;
 
 
         for (int i = 0; i < TotalChar - counter; i++)
@@ -846,14 +851,14 @@ public class Flexible : MonoBehaviour
         {
             Collection.IsGame1 = false;
             conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
-            conn.InsertScoreFlx1(Akun.username, score, accurates.ToString());
+            conn.InsertScoreFlx1(Akun.username, score, (int)accurates + " %");
         }
 
         else if (Collection.IsGame2)
         {
             Collection.IsGame2 = false;
             conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
-            conn.InsertScoreFlx2(Akun.username, score, accurates.ToString());
+            conn.InsertScoreFlx2(Akun.username, score, (int)accurates + " %");
         }
 
         Collection.IsDone = false;
