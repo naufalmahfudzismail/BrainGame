@@ -51,10 +51,11 @@ public class PatternMatch : MonoBehaviour
     public int TargetJumlahBola;
     public float WaktuBatas;
     public int BatasSkorPerLevel = 0;
+    public int MinimalAngkaBola = 10;
     private int TValue = 0;
     private int skor;
     private float timer = 0;
-    private float TimerCount = 15;
+    public float TimerCount = 15;
 
     public List<GameObject> tile;
     public Text score;
@@ -62,6 +63,7 @@ public class PatternMatch : MonoBehaviour
     public Text countDown;
     public Text round;
     public Text Target;
+    public Text hint;
 
     List<GameObject> tileBank = new List<GameObject>();
 
@@ -216,20 +218,20 @@ public class PatternMatch : MonoBehaviour
         }
 
         score.text = skor.ToString();
-        Target.text = "Target Minimal per level : " + TargetJumlahBola;
+        Target.text = "Target Minimal Round " + Tile.Round + " : " + BatasSkorPerLevel;
         TotalScore.text = Score.totalScore.ToString();
         round.text = "Round : " + Tile.Round;
+        hint.text = "Susun Bola dengan minimal  3 warna yang sama, Jumlah angka  dalam bola yang tersusun harus lebih dari sama dengan" + MinimalAngkaBola + ", TAP jika sudah tercapai";
 
         string minutes = Mathf.Floor(TimerCount / 60).ToString("00");
         string seconds = Mathf.Floor(TimerCount % 60).ToString("00");
 
         countDown.text = minutes + ":" + seconds;
 
-
-
+        Over();
         Timer();
 
-        Over();
+        
 
         if (TimerCount == 0 && skor >= BatasSkorPerLevel)
         {
@@ -324,6 +326,7 @@ public class PatternMatch : MonoBehaviour
             acak = false;
             TimerCount = WaktuBatas;
             skor = 0;
+            BatasSkorPerLevel = BatasSkorPerLevel + 1;
             Tile.Round++;
 
         }

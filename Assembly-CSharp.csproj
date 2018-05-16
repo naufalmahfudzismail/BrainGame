@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{8D08EE54-4F1F-B572-386D-499979D3BBFB}</ProjectGuid>
+    <ProjectGuid>{5B5A8CEE-00CD-72BE-1FEA-5BCEE3D4B744}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -51,13 +51,59 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\04 - RadioButton\Example04.cs" />
+     <Compile Include="Assets\MaterialUI\Examples\Scripts\05 - Sliders\Example05.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Anim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ButtonInteractableControl.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\CheckboxConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\CheckboxFillerControl.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\CheckBoxToggler.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ColorCopier.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\DialogBoxConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\EZAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\FPSCounter.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\HSBColor.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\InputFieldConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialGlobals.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUIScaler.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MaterialUIVersion.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\MenuArrowAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\NavDrawerConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\RadioConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\RectTransformSnap.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\RippleAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\RippleConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\RippleControl.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ScreenConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ScreenManager.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SelectionBoxConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SelectionBoxSubscriber.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SelectionListItemConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ShadowAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ShadowConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ShadowGen.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ShadowSnap.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SliderConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SnapButtonToText.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SpriteSwapper.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\SwitchConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\TextInputLine.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ToastAnim.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ToastControl.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\Toaster.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ToggleConfig.cs" />
+     <Compile Include="Assets\MaterialUI\Scripts\ToggleTextChanger.cs" />
+     <Compile Include="Assets\Scripts\Akun.cs" />
      <Compile Include="Assets\Scripts\AnagramScript\Anagram.cs" />
+     <Compile Include="Assets\Scripts\Connection.cs" />
+     <Compile Include="Assets\Scripts\Daftar.cs" />
      <Compile Include="Assets\Scripts\FlexibleScript\Flexible.cs" />
-     <Compile Include="Assets\Scripts\GlobalData.cs" />
-     <Compile Include="Assets\Scripts\Insert.cs" />
+     <Compile Include="Assets\Scripts\FlexibleScript\Versi.cs" />
+     <Compile Include="Assets\Scripts\Opening.cs" />
      <Compile Include="Assets\Scripts\OverScript.cs" />
      <Compile Include="Assets\Scripts\PatternScript\Ball.cs" />
      <Compile Include="Assets\Scripts\PatternScript\PatternMatch.cs" />
+     <None Include="Assets\MaterialUI\Fonts\NOTICE.txt" />
  <Reference Include="Vuforia.UnityExtensions.Editor">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Editor/Vuforia.UnityExtensions.Editor.dll</HintPath>
  </Reference>
@@ -135,9 +181,6 @@
  </Reference>
  <Reference Include="UnityEditor.WindowsStandalone.Extensions">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
- <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>C:/Users/USER/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll</HintPath>

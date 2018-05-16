@@ -62,6 +62,8 @@ public class Flexible : MonoBehaviour
     [HideInInspector] public Text Wrong;
     [HideInInspector] public Text TxtBtnError;
 
+    public Text countDown;
+    public float WaktuTebak = 60;
     private double _wrong;
     private string FieldSoal;
     private float Skor;
@@ -89,15 +91,12 @@ public class Flexible : MonoBehaviour
     private double tSameChar;
     private double tSameFloor;
     private double tSameSound;
-
     float accurates;
-    int index;
+    static float timer = 0;
 
+    int index;
     private string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private List<char> alphabets = new List<char>(); //list alphabet sri string alphabet
-
-
-
     List<AudioSource> SuaraSource = new List<AudioSource>();// list source suara
     List<char> randomedChar = new List<char>(); //list char random
     List<char> sameChar = new List<char>(); //list randomed  yang akan di samakan
@@ -190,12 +189,12 @@ public class Flexible : MonoBehaviour
 
         else if (Collection.IsGame1)
         {
-           
+
             header.text = "Pada Round Flexible N - 1 Back: Klik Character / Position/ Sound , jika huruf / posisi / suara yang muncul sama seperti 1 urutan sebelum nya";
             Round.text = "Flexible N - 1 Back" + "(" + Collection._count + ")";
         }
 
-       
+
         StartCoroutine("SetTask");
         CheckDouble();
 
@@ -245,6 +244,13 @@ public class Flexible : MonoBehaviour
 
         if (Collection.IsDone)
         {
+            string minutes = Mathf.Floor(WaktuTebak / 60).ToString("00");
+            string seconds = Mathf.Floor(WaktuTebak % 60).ToString("00");
+            countDown.text = minutes + ":" + seconds;
+            timer += Time.deltaTime;
+
+            WaktuTebakKata();
+
             accurate = (float)(((tGetChar + tGetFloor + tGetSound) - _wrong) / (tSameChar + tSameFloor + tSameSound));
             accurates = accurate * 100;
             int Total = (int)(accurate * 1000) - (int)(_wrong * 50);
@@ -462,6 +468,51 @@ public class Flexible : MonoBehaviour
         {
 
             Debug.Log(tFl.ToString());
+        }
+
+    }
+
+    public void WaktuTebakKata()
+    {
+        if (timer > 1f)
+        {
+            timer = 0;
+
+            if (WaktuTebak > 0)
+            {
+                WaktuTebak--;
+                string minute = Mathf.Floor(WaktuTebak / 60).ToString("00");
+                string second = Mathf.Floor(WaktuTebak % 60).ToString("00");
+                countDown.text = minute + ":" + second;
+            }
+
+            else
+            {
+                int score = (int)Skor;
+
+                if ( kalimat.text == "")
+                {
+                    kalimat.text = null;
+                }
+
+               
+                if (Collection.IsGame1)
+                {
+                    Collection.IsGame1 = false;
+                    conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
+                    conn.InsertScoreFlx1(Akun.username, score, (int)accurates + " %");
+                }
+
+                else if (Collection.IsGame2)
+                {
+                    Collection.IsGame2 = false;
+                    conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
+                    conn.InsertScoreFlx2(Akun.username, score, (int)accurates + " %");
+                }
+
+                Score.totalScore = Collection.Score;
+                SceneManager.LoadScene("Over");
+            }
         }
 
     }
@@ -845,8 +896,11 @@ public class Flexible : MonoBehaviour
 
     public void InsertData()
     {
-        
+
         int score = (int)Skor;
+
+        Collection.Score += score;
+
         if (Collection.IsGame1)
         {
             Collection.IsGame1 = false;
@@ -865,7 +919,7 @@ public class Flexible : MonoBehaviour
 
         if (Collection._count >= perulangan)
         {
-           
+            Score.totalScore = Collection.Score;
             SceneManager.LoadScene("Over");
         }
         else
@@ -902,17 +956,6 @@ public class Flexible : MonoBehaviour
         isPaused = true;
     }
 
-    
-
-
-
-
-    /*
-	 * WHAT TO DO NOW:
-	 * REPLAY THE SCENE ABOUT 5 TIMES
-	 * TAMPUNG SCORE TIAP REPLAY DALAM BENTUK STATIS
-	 * BUILD 2 SCENE GAMEPLAY, SCOREBOARD
-	*/
 
 
 }

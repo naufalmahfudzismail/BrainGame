@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{04BC4504-5BEF-1290-BB9F-0BB8F50669B2}</ProjectGuid>
+    <ProjectGuid>{96C42E3E-56A6-7DF6-5BDD-03BC74BFF7FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -51,7 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\JSON\Editor\JSONChecker.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\CheckboxConfigEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\EZAnimEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\MaterialUIEditorTools.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\RectTransformSnapEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\RippleConfigEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\ScreenConfigEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\ShadowGenEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\SnapButtonToTextEditor.cs" />
+     <Compile Include="Assets\MaterialUI\Editor\TexturePostProcessor.cs" />
  <Reference Include="Vuforia.UnityExtensions.Editor">
  <HintPath>D:/adobe/New folder/Unity/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Editor/Vuforia.UnityExtensions.Editor.dll</HintPath>
  </Reference>
@@ -151,10 +159,16 @@
  <Reference Include="UnityEngine.StandardEvents">
  <HintPath>C:/Users/USER/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll</HintPath>
  </Reference>
+ <Reference Include="ChannelPurchase">
+ <HintPath>C:/Users/USER/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.xiaomi@1.0.0/UnityChannel/ChannelPurchase.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityStore">
+ <HintPath>C:/Users/USER/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.xiaomi@1.0.0/UnityChannel/UnityStore.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{8D08EE54-4F1F-B572-386D-499979D3BBFB}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{5B5A8CEE-00CD-72BE-1FEA-5BCEE3D4B744}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
