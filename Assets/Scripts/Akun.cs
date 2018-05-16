@@ -2,7 +2,7 @@
 
 public class Akun  {
 
-    public static string username;
+    public static string username = "admin";
     public static string password;
 
 }

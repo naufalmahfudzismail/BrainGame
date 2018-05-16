@@ -1,14 +1,13 @@
 Android
 SceneListBegin?
-Assets/Scenes/Login.unity
+Assets/Scenes/Login_Anagram.unity
 Assets/Scenes/Register.unity
-Assets/Scenes/PreFlexible.unity
-Assets/Scenes/Flexible.unity
+Assets/Scenes/Anagram.unity
 Assets/Scenes/Over.unity
 SceneListEnd?
 0e206abc0faa955f6cacb43f89f0a444 Assembly-CSharp.dll:MaterialUI.RippleAnim
 589fe6e1867b6a18424a9606d79fe6bf Assembly-CSharp.dll:MaterialUI.NavDrawerConfig
-9669826b07d731a59c570f5f4d327bf9 Assembly-CSharp.dll:.PatternMatch
+0b9db7c7ccf954fba0ee1114f4a1357c Assembly-CSharp.dll:.PatternMatch
 2b8913328f5a53011dd71be5a2493214 Assembly-CSharp.dll:MaterialUI.EZAnim
 cf2cee09950206dcacc8512db06dc449 Assembly-CSharp.dll:.CheckboxFillerControl
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
@@ -210,7 +209,7 @@ e45161899efe8cad5875bda2ebdec31d Assembly-CSharp.dll:MaterialUI.ShadowSnap
 e5d9ab3e3afae89fd535a121729c2aad Assembly-CSharp.dll:.Example05
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
-11c7a314c492a331c9701f36c8310596 Assembly-CSharp.dll:.Daftar
+806dfa6a99dfbe42364972011c805798 Assembly-CSharp.dll:.Daftar
 e024402a708ba845635b872ee0cb1f0d Assembly-CSharp.dll:MaterialUI.Toaster
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MaterialUI.MaterialUIScaler
 8bc857a757347479151849a84f6550ce Assembly-CSharp.dll:MaterialUI.ShadowGen
@@ -249,12 +248,12 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 b31b3d88beb5407a57fe18cd8380e4bd Assembly-CSharp.dll:.Versi
-c3d0a016171d666b8216e961f0bd9c1a Assembly-CSharp.dll:.Anagram
+b4329aa4473d402517f4376a907e3926 Assembly-CSharp.dll:.Anagram
 537a0cd4db610d44b8ed8b8bae07d2f9 Assembly-CSharp.dll:.Ball
 6ced5e30b46aade805ee2cd388523322 Assembly-CSharp.dll:MaterialUI.CheckBoxToggler
 855e6c2cc83470f708608120f850e5d7 Assembly-CSharp.dll:MaterialUI.ScreenConfig
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
-81c29a089d4e54cb5efc8fc3fad13a58 Assembly-CSharp.dll:.Flexible
+678e9a62c033c2efb191ece2c07c785d Assembly-CSharp.dll:.Flexible
 725f39fbf34790ae025ddeadf288f717 Assembly-CSharp.dll:.ToggleTextChanger
 8f9ca3035a51ae9fa67a3f8ceed38ca2 Assembly-CSharp.dll:MaterialUI.ShadowConfig
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MaterialUI.ToggleConfig

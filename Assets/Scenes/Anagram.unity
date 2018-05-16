@@ -252,13 +252,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Submit
+  m_Text: 'OK
 
 '
 --- !u!222 &23711660
@@ -1450,7 +1450,7 @@ GameObject:
   - component: {fileID: 387036286}
   - component: {fileID: 387036285}
   m_Layer: 5
-  m_Name: Point
+  m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1471,8 +1471,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 381}
-  m_SizeDelta: {x: 564.6, y: 55.3}
+  m_AnchoredPosition: {x: 1.0625, y: 365.5}
+  m_SizeDelta: {x: 597.9, y: 56.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &387036285
 MonoBehaviour:
@@ -1495,8 +1495,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
-    m_FontStyle: 0
+    m_FontSize: 30
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
@@ -1506,7 +1506,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Hp
+  m_Text: 'Timer
 
 '
 --- !u!222 &387036286
@@ -2115,7 +2115,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 1
@@ -4314,8 +4314,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4, y: 307}
-  m_SizeDelta: {x: 603.7, y: 85.8}
+  m_AnchoredPosition: {x: 4, y: 300.6}
+  m_SizeDelta: {x: 603.7, y: 73.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1779980243
 MonoBehaviour:
@@ -4343,7 +4343,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -4549,8 +4549,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JumlahMaksimalHuruf: 4
   JumlahLevel: 2
-  KesempatanMenyusunKata: 2
   KesempatanMengingatHuruf: 2
+  WaktuMembuatKalimat: 60
   Connection: {fileID: 2001398569}
   canvasError: {fileID: 629573328}
   canvas1: {fileID: 1451636280}

@@ -19,16 +19,16 @@ public class Anagram : MonoBehaviour
 
     public int JumlahMaksimalHuruf = 4;
     public int JumlahLevel = 1;
-    public int KesempatanMenyusunKata = 5;
     public int KesempatanMengingatHuruf = 5;
+    public float WaktuMembuatKalimat = 60;
     private Connection conn;
-    [HideInInspector]public GameObject Connection;
+    [HideInInspector] public GameObject Connection;
 
     private string soal;
     private string tipeSoal;
     private string choosenSoal;
 
-   
+
     private int score;
     private int[] randomArray = new int[12];
     private int desiredLength;
@@ -57,7 +57,7 @@ public class Anagram : MonoBehaviour
 
 
     [HideInInspector] public Text[] txtObj;   // Objek text nya
-    [HideInInspector] public Text Hp;
+     public Text Hp;
     [HideInInspector] public Text Result;
     [HideInInspector] public Text Clue;
     [HideInInspector] public Text countDown;
@@ -144,7 +144,7 @@ public class Anagram : MonoBehaviour
             print(Levels.kamus.Length);
         }
 
-     
+
         CloseButton();
         GetSoal(Levels.kamus, Levels.kategori);
         StartCoroutine("TextinObject");
@@ -173,15 +173,12 @@ public class Anagram : MonoBehaviour
             TxtBtnError.text = "Retry";
             isPaused = true;
         }
-
-        Timer();
-
-        Round.text = "Round : " + Levels.JLevel;
-
-        Hp.text = "Kesempatan menyusun : " + KesempatanMenyusunKata.ToString();
-        lifecount.text = "Chance : " + KesempatanMengingatHuruf.ToString();
-        ScoreWhile.text = "Score sementara :" + score;
-
+        
+            Timer();
+            Round.text = "Round : " + Levels.JLevel;
+            lifecount.text = "Chance : " + KesempatanMengingatHuruf.ToString();
+            ScoreWhile.text = "Score sementara :" + score;
+        
         if (isRemember)
         {
             OpenButton();
@@ -200,6 +197,8 @@ public class Anagram : MonoBehaviour
 
         if (isDone && !isPlay && !isRemember)
         {
+
+            Timer2();
             string[] dummy = new string[choosen.Count];
 
             for (int d = 0; d < choosen.Count; d++)
@@ -215,7 +214,7 @@ public class Anagram : MonoBehaviour
             Clue.text = tipeSoal.ToString();
         }
 
-        if (KesempatanMengingatHuruf == 0 || KesempatanMenyusunKata == 0)
+        if (KesempatanMengingatHuruf == 0)
         {
 
             conn.InsertScoreAna(Akun.username, score);
@@ -371,6 +370,7 @@ public class Anagram : MonoBehaviour
 
     private void Timer() //time to remember
     {
+        
         timer += Time.deltaTime;
         if (timer > 1f)
         {
@@ -384,7 +384,7 @@ public class Anagram : MonoBehaviour
                 countDown.text = "Timer     " + minutes + ":" + seconds;
             }
 
-            if (TimerCount == 0)
+            if (TimerCount == 0 && !isDone)
             {
                 isRemember = true;
                 CloseText();
@@ -392,6 +392,32 @@ public class Anagram : MonoBehaviour
 
             }
 
+        }
+    }
+
+    public void Timer2()
+    {
+       
+         timer += Time.deltaTime;
+        if (timer > 1f)
+        {
+            timer = 0;
+
+            if (WaktuMembuatKalimat > 0)
+            {
+                WaktuMembuatKalimat --;
+                string minutes = Mathf.Floor(WaktuMembuatKalimat  / 60).ToString("00");
+                string seconds = Mathf.Floor(WaktuMembuatKalimat  % 60).ToString("00");
+                Hp.text = "Timer     " + minutes + ":" + seconds;
+            }
+
+            if ( WaktuMembuatKalimat  == 0)
+            {
+                Score.totalScore = score;
+                conn.InsertKataAna(Akun.username, soal, txtSentences.text);
+                conn.InsertScoreAna(Akun.username, score);
+                SceneManager.LoadScene("Over");
+            }
         }
     }
 
@@ -407,21 +433,14 @@ public class Anagram : MonoBehaviour
             if (Jawaban == Soal)
             {
                 Result.text = "Selamat, Jawaban anda benar!";
-                score = score + (1000 * KesempatanMenyusunKata);
+                score = score + 1000;
                 TxtSentence.SetActive(true);
                 SendButton.SetActive(true);
             }
             else
             {
                 Result.text = "Maaf, Jawaban anda Salah!";
-                KesempatanMenyusunKata--;
-            }
-
-            if (KesempatanMenyusunKata == 0)
-            {
-
-                Result.text = "Maaf, Anda Gagal!";
-                ReplayButton.SetActive(true);
+              
             }
         }
     }
@@ -438,6 +457,7 @@ public class Anagram : MonoBehaviour
         string kalimat = txtSentences.text;
         if (kalimat.Contains(soal))
         {
+            txtSentences.readOnly = true;
 
             if (Levels.JLevel == JumlahLevel)
             {
