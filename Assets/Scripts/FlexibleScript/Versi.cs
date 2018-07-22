@@ -19,7 +19,7 @@ public class Versi : MonoBehaviour
 
         Screen.SetResolution(600, 1024, true);
     }
-        
+
     void Start()
     {
         round.text = "Round : " + Collection._count;
@@ -36,7 +36,7 @@ public class Versi : MonoBehaviour
 
     }
 
-    public void Flx1()
+    public void Flx1() //method button flx1
     {
         Collection.IsGame2 = false;
         Collection.IsGame1 = true;
@@ -48,26 +48,26 @@ public class Versi : MonoBehaviour
                 int u = System.Int32.Parse(ulang.text);
                 if (u < 0)
                     u = u * -1;
-      
+
                 Collection.ulang = u;
                 SceneManager.LoadScene("Flexible");
 
             }
             catch (System.Exception Ex)
             {
-              
+
                 mark.text = Ex.Message;
-                
+
             }
         }
 
-        else if ( Collection._count > 1)
+        else if (Collection._count > 1)
         {
             SceneManager.LoadScene("Flexible");
         }
     }
 
-    public void Flx2()
+    public void Flx2() //method button flx2
     {
         Collection.IsGame1 = false;
         Collection.IsGame2 = true;
@@ -75,9 +75,12 @@ public class Versi : MonoBehaviour
         {
             try
             {
-                Collection.ulang = System.Int32.Parse(ulang.text);
-                SceneManager.LoadScene("Flexible");
+                int u = System.Int32.Parse(ulang.text);
+                if (u < 0)
+                    u = u * -1;
 
+                Collection.ulang = u;
+                SceneManager.LoadScene("Flexible");
             }
             catch (System.Exception Ex)
             {

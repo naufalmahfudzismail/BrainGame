@@ -38,34 +38,34 @@ public class PatternMatch : MonoBehaviour
 {
     private Connection conn;
     private bool isPaused = false;
-    public GameObject Connection;
+    [HideInInspector] public GameObject Connection;
 
-    GameObject tile1 = null;
-    GameObject tile2 = null;
+    private GameObject tile1 = null;
+    private GameObject tile2 = null;
 
-    Ball ball1;
-    Ball ball2;
-    Ball ball3;
+    private Ball ball1;
+    private Ball ball2;
+    private Ball ball3;
 
-
-    public int TargetJumlahBola;
     public float WaktuBatas;
     public int BatasSkorPerLevel = 0;
-    public int MinimalAngkaBola = 10;
+    public int MinimalJumlahNilaiBola = 10;
     private int TValue = 0;
     private int skor;
+    public int KenaikanBatasScorePerLevel = 1;
     private float timer = 0;
-    public float TimerCount = 15;
+    private float TimerCount = 15;
+    private int BallCount;
 
-    public List<GameObject> tile;
-    public Text score;
-    public Text TotalScore;
-    public Text countDown;
-    public Text round;
-    public Text Target;
-    public Text hint;
+    [HideInInspector]public List<GameObject> tile;
+    [HideInInspector] public Text score;
+    [HideInInspector] public Text TotalScore;
+    [HideInInspector] public Text countDown;
+    [HideInInspector] public Text round;
+    [HideInInspector] public Text Target;
+    [HideInInspector] public Text hint;
 
-    List<GameObject> tileBank = new List<GameObject>();
+    private List<GameObject> tileBank = new List<GameObject>();
 
     static int baris = 8;
     static int kolom = 6;
@@ -75,9 +75,9 @@ public class PatternMatch : MonoBehaviour
     private bool renewBoard = false;
     private bool acak = false;
 
-    public Text error;
-    public Text Progress;
-    public GameObject canvasError;
+    [HideInInspector] public Text error;
+    [HideInInspector] public Text Progress;
+    [HideInInspector] public GameObject canvasError;
 
 
     private void Awake()
@@ -137,7 +137,6 @@ public class PatternMatch : MonoBehaviour
         }
 
     }
-
     void Update()
     {
 
@@ -204,41 +203,25 @@ public class PatternMatch : MonoBehaviour
                     tile1 = null;
                     tile2 = null;
                 }
-                else
-                {
-
-                    //terpilih = false;
-
-                }
-
-
-
             }
 
         }
+
+        print(BallCount);
 
         score.text = skor.ToString();
         Target.text = "Target Minimal Round " + Tile.Round + " : " + BatasSkorPerLevel;
         TotalScore.text = Score.totalScore.ToString();
         round.text = "Round : " + Tile.Round;
-        hint.text = "Susun Bola dengan minimal  3 warna yang sama, Jumlah angka  dalam bola yang tersusun harus lebih dari sama dengan" + MinimalAngkaBola + ", TAP jika sudah tercapai";
+        hint.text = "Susun Bola dengan minimal  3 warna yang sama, Jumlah angka  dalam bola yang tersusun harus lebih dari sama dengan" + MinimalJumlahNilaiBola + ", TAP jika sudah tercapai";
 
         string minutes = Mathf.Floor(TimerCount / 60).ToString("00");
         string seconds = Mathf.Floor(TimerCount % 60).ToString("00");
 
         countDown.text = minutes + ":" + seconds;
 
-        Over();
         Timer();
-
-        
-
-        if (TimerCount == 0 && skor >= BatasSkorPerLevel)
-        {
-            skor = 0;
-        }
-
-
+        Over();
 
     }
 
@@ -249,13 +232,11 @@ public class PatternMatch : MonoBehaviour
         int r = tileBank.Count;
         while (r > 1)
         {
-
             r--;
             int n = rand.Next(r + 1);
             GameObject val = tileBank[n];
             tileBank[n] = tileBank[r];
             tileBank[r] = val;
-
 
         }
 
@@ -323,13 +304,21 @@ public class PatternMatch : MonoBehaviour
             }
 
             Debug.Log("ReShuffle!");
-            acak = false;
             TimerCount = WaktuBatas;
             skor = 0;
-            BatasSkorPerLevel = BatasSkorPerLevel + 1;
+            acak = false;
+            BatasSkorPerLevel = BatasSkorPerLevel + KenaikanBatasScorePerLevel;
             Tile.Round++;
 
         }
+    }
+
+    private void InsertToDatabase()
+    {
+        conn.InsertPattern(Akun.username,
+           Tile.Round.ToString(),
+            BallCount, Score.
+            totalScore, "Angka Bola : " + MinimalJumlahNilaiBola + ", " + "Batas Score : " + BatasSkorPerLevel);
     }
 
 
@@ -348,9 +337,8 @@ public class PatternMatch : MonoBehaviour
                 countDown.text = minutes + ":" + seconds;
             }
 
-            else
+            else if ( TimerCount <= 0 && skor >= BatasSkorPerLevel )
             {
-
                 acak = true;
                 reShuffle();
             }
@@ -387,7 +375,7 @@ public class PatternMatch : MonoBehaviour
                         counter = 1;
                     }
                     // if there are found, calculate the value
-                    if (counter == 3 && Input.GetMouseButtonDown(1))
+                    if (counter == 3 && Input.GetMouseButtonDown(0))
                     {
 
                         //tercapai = true;
@@ -401,15 +389,23 @@ public class PatternMatch : MonoBehaviour
                         TValue = ball1.getValue() + ball2.getValue() + ball3.getValue();
 
                         // if their total value is reached target, remove them
-                        if (TargetJumlahBola <= TValue)
+                        if (MinimalJumlahNilaiBola <= TValue)
                         {
-
                             if (tiles[k, b] != null)
+                            {
                                 tiles[k, b].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             if (tiles[k - 1, b] != null)
+                            {
                                 tiles[k - 1, b].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             if (tiles[k - 2, b] != null)
+                            {
                                 tiles[k - 2, b].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             tiles[k, b] = null;
                             tiles[k - 1, b] = null;
                             tiles[k - 2, b] = null;
@@ -448,7 +444,7 @@ public class PatternMatch : MonoBehaviour
                         counter = 1;
                     }
                     // if there are found, calculate the value
-                    if (counter == 3 && Input.GetMouseButtonDown(1))
+                    if (counter == 3 && Input.GetMouseButtonDown(0))
                     {
                         if (tiles[k, b] != null)
                             ball1 = tiles[k, b].tileObject.GetComponent<Ball>();
@@ -460,14 +456,23 @@ public class PatternMatch : MonoBehaviour
                         TValue = ball1.getValue() + ball2.getValue() + ball3.getValue();
 
                         // if their total value is reached target, remove them
-                        if (TargetJumlahBola <= TValue)
+                        if (MinimalJumlahNilaiBola <= TValue)
                         {
                             if (tiles[k, b] != null)
+                            {
                                 tiles[k, b].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             if (tiles[k, b - 1] != null)
+                            {
                                 tiles[k, b - 1].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             if (tiles[k, b - 2] != null)
+                            {
                                 tiles[k, b - 2].tileObject.SetActive(false);
+                                BallCount++;
+                            }
                             tiles[k, b] = null;
                             tiles[k, b - 1] = null;
                             tiles[k, b - 2] = null;
@@ -547,15 +552,11 @@ public class PatternMatch : MonoBehaviour
 
     private void Over()
     {
-        if (TimerCount == 0 && skor < BatasSkorPerLevel)
+        if (TimerCount <= 0 && skor < BatasSkorPerLevel)
         {
-            conn.InsertScore3Col(Akun.username, Score.totalScore);
+            InsertToDatabase();
             SceneManager.LoadScene("Over");
         }
-
     }
-
-
-
 }
 

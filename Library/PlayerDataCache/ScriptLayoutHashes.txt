@@ -1,8 +1,8 @@
 Android
 SceneListBegin?
-Assets/Scenes/Login_Anagram.unity
+Assets/Scenes/Login_Pattern.unity
 Assets/Scenes/Register.unity
-Assets/Scenes/Anagram.unity
+Assets/Scenes/PatternMatch.unity
 Assets/Scenes/Over.unity
 SceneListEnd?
 0e206abc0faa955f6cacb43f89f0a444 Assembly-CSharp.dll:MaterialUI.RippleAnim

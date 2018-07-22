@@ -7,27 +7,43 @@ using UnityEngine.SceneManagement;
 
 public class Collection
 {
-    public static bool IsGame1 = false;
+    public static bool IsGame1 = true;
     public static bool IsGame2 = false;
     public static bool IsDone = false;
     public static bool counter = false;
     public static int ulang = 0;
     public static int _count = 1;
-    public static string[] kamus; // array kamus data
+    public static string[] kategori; // array kamus data
     public static int Score = 0;
+    public static void RandomList(int[] array) // random prevent repeating index
+    {
+        int arraySize = array.Length;
+        int random;
+        int temp;
+
+        for (int i = 0; i < arraySize; i++)
+        {
+            random = Random.Range(0, arraySize - 1);
+            temp = array[random];
+            array[random] = array[i];
+            array[i] = temp;
+        }
+    }
 }
 
 public class Flexible : MonoBehaviour
 {
     private Connection conn;
-    public GameObject Connection;
+    [HideInInspector] public GameObject Connection;
 
     static System.Random rand = new System.Random();
 
     public int JumlahCharacter = 40;
     public float WaktuPerStep = 2f;
     public int perulangan = 0;
-
+    public int ScorePerAkurasi;
+    public int PenguranganScoreSalah;
+    public string[] ListKategori;
     [HideInInspector] public Button CharButton;
     [HideInInspector] public Button PostButton;
     [HideInInspector] public Button SoundButton;
@@ -45,7 +61,6 @@ public class Flexible : MonoBehaviour
     [HideInInspector] public InputField[] InputKata = new InputField[3];
     [HideInInspector] public InputField kalimat;
     [HideInInspector] public Text[] floor = new Text[9];
-    [HideInInspector] public Text[] result;
     [HideInInspector] public Text soal;
     [HideInInspector] public Text charScore;
     [HideInInspector] public Text postScore;
@@ -61,13 +76,14 @@ public class Flexible : MonoBehaviour
     [HideInInspector] public Text header;
     [HideInInspector] public Text Wrong;
     [HideInInspector] public Text TxtBtnError;
-
-    public Text countDown;
+    [HideInInspector] public Text countDown;
     public float WaktuTebak = 60;
     private double _wrong;
     private string FieldSoal;
+    private string SOAL;
+    private string HURUF;
     private float Skor;
-
+    private string tema;
     private bool CharisMatched = false;
     private bool FloorisMatched = false;
     private bool SoundisMatched = false;
@@ -77,14 +93,7 @@ public class Flexible : MonoBehaviour
     private int JumlahSoal;
     private float SlideValue;
     private float accurate;
-
-    private string[] kategori = new string[3]
-    {
-       "HEWAN", "BUAH", "SAYURAN"
-    };
-
     private List<char> wasDoubled = new List<char>(); //list double value char dari finalchar 
-    private List<char> distinctDouble = new List<char>(); //list wasdouble yang telah di distinct
     private double tGetChar;
     private double tGetFloor;
     private double tGetSound;
@@ -105,6 +114,8 @@ public class Flexible : MonoBehaviour
     List<char> finalChar = new List<char>(); //list dari gabungan anatar random list sameclone dan difchar
     List<char> _finalChar = new List<char>(); //disticnt finalchar
     List<Text> tFl = new List<Text>(); //list gameobject text
+    private List<string> Stringsoal = new List<string>();
+    private List<string> StringHuruf = new List<string>();
 
     private void Awake()
     {
@@ -113,15 +124,17 @@ public class Flexible : MonoBehaviour
 
 
         ObjectActive();
-        perulangan = Collection.ulang + 1;
-
+        if (Collection.ulang > 0)
+            perulangan = Collection.ulang + 1;
+        else
+        {
+            perulangan = perulangan + 1;
+        }
         if (JumlahCharacter % 2 != 0)
         {
             print("JumlahCharacter Karater tidak bisa ganjil, set Default = 40");
             JumlahCharacter = 40;
         }
-
-
 
     }
 
@@ -154,30 +167,12 @@ public class Flexible : MonoBehaviour
     }
 
     // Use this for initialization
-    IEnumerator Start()
+    void Start()
     {
-        if (Collection._count == 1)
+        if (Collection._count == 1 && Collection.ulang == 0)
         {
-            WWW items = new WWW(conn.getUrlKataDasar());
-            StartCoroutine(ShowProgress(items));
-            yield return items;
-            string itemsString = items.text;
-
-            Collection.kamus = itemsString.Split('|');
-            for (int i = 0; i < Collection.kamus.Length; i++)
-            {
-                Collection.kamus[i] = Collection.kamus[i].ToUpper();
-            }
-
-            for (int i = 0; i < Collection.kamus.Length; i++)
-            {
-                print(Collection.kamus[i]);
-            }
+            InisialTheme();
         }
-
-        index = Random.Range(0, kategori.Length - 1);
-        Kategori.text = "Kategori : " + kategori[index];
-
 
         if (Collection.IsGame2)
         {
@@ -194,10 +189,8 @@ public class Flexible : MonoBehaviour
             Round.text = "Flexible N - 1 Back" + "(" + Collection._count + ")";
         }
 
-
         StartCoroutine("SetTask");
         CheckDouble();
-
 
     }
 
@@ -215,6 +208,23 @@ public class Flexible : MonoBehaviour
         }
     }
 
+    private void InisialTheme()
+    {
+        List<string> tema = new List<string>();
+        int c = ListKategori.Length;
+        int[] indexTema = new int[c];
+        for (int i = 0; i < c; i++)
+        {
+            indexTema[i] = i;
+        }
+        Collection.RandomList(indexTema);
+        for (int i = 0; i < c; i++)
+        {
+            tema.Add(ListKategori[indexTema[i]]);
+        }
+        Collection.kategori = tema.ToArray();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -228,16 +238,7 @@ public class Flexible : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            canvasError.SetActive(true);
-            error.text = "Network Connection Unavailable";
-            Progress.text = "";
-            TxtBtnError.text = "Retry";
-            isPaused = true;
-        }
-
-
+        /**/
         charScore.text = tGetChar.ToString();
         postScore.text = tGetFloor.ToString();
         soundScore.text = tGetSound.ToString();
@@ -262,34 +263,28 @@ public class Flexible : MonoBehaviour
             Wrong.text = "Kesalahan : " + _wrong;
             Skor = Total;
             Scores.text = "Score Game : " + Skor;
-
-
+            Kategori.text = Collection.kategori[Collection._count - 1];
+            tema = Collection.kategori[Collection._count - 1];
             canvasPlay.SetActive(false);
             canvasField.SetActive(true);
 
             IdentifyChar();
 
-            if (result[0].text == "Benar" && result[1].text == "Benar" && result[2].text == "Benar")
+            string[] kata = new string[3];
+
+            for (int i = 0; i < kata.Length; i++)
             {
-                string[] kata = new string[3];
-
-                for (int i = 0; i < kata.Length; i++)
-                {
-                    kata[i] = InputKata[i].text;
-                }
-
-                FieldSoal = string.Join(",", kata);
-
-                Soaltxt.SetActive(true);
-
-                soal.text = "Buatlah kalimat tersebut dengan kata " + FieldSoal;
-
-                Kalimat.SetActive(true);
-
+                kata[i] = InputKata[i].text;
             }
 
-        }
+            FieldSoal = string.Join(",", kata);
 
+            Soaltxt.SetActive(true);
+
+            soal.text = "Buatlah kalimat tersebut dengan kata " + FieldSoal;
+
+            Kalimat.SetActive(true);
+        }
     }
 
     IEnumerator Loading()
@@ -350,7 +345,6 @@ public class Flexible : MonoBehaviour
         {
             Debug.Log(sameClone[i]);
         }
-
 
     }
 
@@ -488,26 +482,25 @@ public class Flexible : MonoBehaviour
 
             else
             {
-                int score = (int)Skor;
 
-                if ( kalimat.text == "")
+                int score = (int)Skor;
+                Collection.Score = Collection.Score + score;
+
+                if (kalimat.text == "")
                 {
                     kalimat.text = null;
                 }
 
-               
                 if (Collection.IsGame1)
                 {
                     Collection.IsGame1 = false;
-                    conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
-                    conn.InsertScoreFlx1(Akun.username, score, (int)accurates + " %");
+                    conn.InsertFlexible(Akun.username, "Flexible N - 1 Back", Kategori.text, SOAL, Collection.ulang.ToString(), HURUF, Collection.Score, kalimat.text, FieldSoal);
                 }
 
                 else if (Collection.IsGame2)
                 {
                     Collection.IsGame2 = false;
-                    conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
-                    conn.InsertScoreFlx2(Akun.username, score, (int)accurates + " %");
+                    conn.InsertFlexible(Akun.username, "Flexible N - 2 Back", Kategori.text, SOAL, Collection.ulang.ToString(), HURUF, Collection.Score, kalimat.text, FieldSoal);
                 }
 
                 Score.totalScore = Collection.Score;
@@ -671,7 +664,17 @@ public class Flexible : MonoBehaviour
             Debug.Log(c);
             _finalChar.Add(c);
         }
+        foreach (char c in finalChar)
+        {
+            StringHuruf.Add(c.ToString());
+        }
+        foreach (char c in wasDoubled)
+        {
+            Stringsoal.Add(c.ToString());
+        }
 
+        HURUF = string.Join(",", StringHuruf.ToArray());
+        SOAL = string.Join(",", Stringsoal.ToArray());
     }
 
     public void ClickHuruf()
@@ -735,197 +738,203 @@ public class Flexible : MonoBehaviour
     }
 
 
-    public void Check()
-    {
-        if (InputKata[0].text != null || InputKata[0].text == "")
-        {
-            InputKata[0].text = InputKata[0].text.ToUpper();
-            bool isMatched = CheckKamus(InputKata[0].text);
+    /* public void Check()
+     {
+         if (InputKata[0].text != null || InputKata[0].text == "")
+         {
+             InputKata[0].text = InputKata[0].text.ToUpper();
+             bool isMatched = CheckKamus(InputKata[0].text);
 
-            if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
-            {
-                result[0].text = "Benar";
-                Skor = Skor + 100;
-                InputKata[0].readOnly = true;
-            }
-
-
-            else
-            {
-                result[0].text = "Salah";
-                InputKata[0].text = "";
-            }
-        }
-
-    }
-
-    public void Check2()
-    {
-        if (InputKata[1].text != null || InputKata[1].text == "")
-        {
-            InputKata[1].text = InputKata[1].text.ToUpper();
-            bool isMatched = CheckKamus(InputKata[1].text);
-
-            if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
-            {
-                result[1].text = "Benar";
-                Skor = Skor + 100;
-                InputKata[1].readOnly = true;
-            }
-            else
-            {
-                result[1].text = "Salah";
-                InputKata[1].text = "";
-            }
-        }
-    }
-
-    public void Check3()
-    {
-        if (InputKata[2].text != null || InputKata[2].text == "")
-        {
-            InputKata[2].text = InputKata[2].text.ToUpper();
-            bool isMatched = CheckKamus(InputKata[2].text);
-
-            if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
-            {
-                result[2].text = "Benar";
-                Skor = Skor + 100;
-                InputKata[2].readOnly = true;
-            }
-            else
-            {
-                result[2].text = "Salah";
-                InputKata[2].text = "";
-            }
-        }
-
-    }
-
-    private bool CheckKamus(string kata) //check kata, apakah kata depan nya sesuai dan apakah kata tersebut sesuai kamus data
-    {
-        char[] c = kata.ToCharArray();
-        int i = Collection.kamus.Length;
-        int j = _finalChar.Count;
-        bool isThrough = false;
-        bool isMatched = false;
-
-        print(j);
-        print(i);
-        print(kata);
+             if (isMatched && InputKata[1].text != InputKata[0].text && InputKata[2].text != InputKata[0].text)
+             {
+                 result[0].text = "Benar";
+                 Skor = Skor + 100;
+                 InputKata[0].readOnly = true;
+             }
 
 
-        if (kata != null || kata != "")
-        {
-            for (int y = 0; y < j; y++)
-            {
+             else
+             {
+                 result[0].text = "Salah";
+                 InputKata[0].text = "";
+             }
+         }
 
-                if (c[0] == _finalChar[y])
-                {
-                    isThrough = true;
-                    y = j;
-                }
+     }
 
-            }
-            if (isThrough)
-            {
-                for (int x = 0; x < i; x++)
-                {
-                    if (kata == Collection.kamus[x])
-                    {
-                        isMatched = true;
-                        x = i;
-                    }
-                }
+     public void Check2()
+     {
+         if (InputKata[1].text != null || InputKata[1].text == "")
+         {
+             InputKata[1].text = InputKata[1].text.ToUpper();
+             bool isMatched = CheckKamus(InputKata[1].text);
 
-                if (isMatched)
-                {
-                    int k = System.Array.IndexOf<string>(Collection.kamus, kata);
-                    print(k);
-                    print(k + 1);
-                    string d = Collection.kamus[k + 1];
+             if (isMatched && InputKata[0].text != InputKata[1].text && InputKata[2].text != InputKata[1].text)
+             {
+                 result[1].text = "Benar";
+                 Skor = Skor + 100;
+                 InputKata[1].readOnly = true;
+             }
+             else
+             {
+                 result[1].text = "Salah";
+                 InputKata[1].text = "";
+             }
+         }
+     }
 
-                    if (d == kategori[index])
-                    {
-                        return true;
-                    }
+     public void Check3()
+     {
+         if (InputKata[2].text != null || InputKata[2].text == "")
+         {
+             InputKata[2].text = InputKata[2].text.ToUpper();
+             bool isMatched = CheckKamus(InputKata[2].text);
 
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
+             if (isMatched && InputKata[0].text != InputKata[2].text && InputKata[1].text != InputKata[2].text)
+             {
+                 result[2].text = "Benar";
+                 Skor = Skor + 100;
+                 InputKata[2].readOnly = true;
+             }
+             else
+             {
+                 result[2].text = "Salah";
+                 InputKata[2].text = "";
+             }
+         }
 
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
+     }
+
+     private bool CheckKamus(string kata) //check kata, apakah kata depan nya sesuai dan apakah kata tersebut sesuai kamus data
+     {
+         char[] c = kata.ToCharArray();
+         int i = Collection.kamus.Length;
+         int j = _finalChar.Count;
+         bool isThrough = false;
+         bool isMatched = false;
+
+         print(j);
+         print(i);
+         print(kata);
+
+
+         if (kata != null || kata != "")
+         {
+             for (int y = 0; y < j; y++)
+             {
+
+                 if (c[0] == _finalChar[y])
+                 {
+                     isThrough = true;
+                     y = j;
+                 }
+
+             }
+             if (isThrough)
+             {
+                 for (int x = 0; x < i; x++)
+                 {
+                     if (kata == Collection.kamus[x])
+                     {
+                         isMatched = true;
+                         x = i;
+                     }
+                 }
+
+                 if (isMatched)
+                 {
+                     int k = System.Array.IndexOf<string>(Collection.kamus, kata);
+                     print(k);
+                     print(k + 1);
+                     string d = Collection.kamus[k + 1];
+
+                     if (d == kategori[index])
+                     {
+                         return true;
+                     }
+
+                     else
+                     {
+                         return false;
+                     }
+                 }
+                 else
+                 {
+                     return false;
+                 }
+             }
+             else
+             {
+                 return false;
+
+             }
+         }
+         else
+         {
+             return false;
+         }
+     }*/
 
     public void CheckKalimat()
     {
         if (kalimat != null)
         {
-            kalimat.text = kalimat.text.ToUpper();
-            if (kalimat.text.Contains(InputKata[0].text) && kalimat.text.Contains(InputKata[1].text) && kalimat.text.Contains(InputKata[2].text))
-            {
-                Skor = Skor + 500;
-                ResultCek.text = "Benar!";
-                InsertButton.SetActive(true);
-                kalimat.readOnly = true;
-            }
+            Skor = Skor + 500;
+            InsertButton.SetActive(true);
+            kalimat.readOnly = true;
+        }
+        else
+        {
+            ResultCek.text = "Kalimat belum sesuai";
+            kalimat.text = "";
 
-            else
-            {
-                ResultCek.text = "Kalimat belum sesuai";
-                kalimat.text = "";
-
-            }
         }
     }
 
     public void InsertData()
     {
 
-        int score = (int)Skor;
-
-        Collection.Score += score;
-
-        if (Collection.IsGame1)
+        if (Application.internetReachability == NetworkReachability.NotReachable)
         {
-            Collection.IsGame1 = false;
-            conn.InsertKataFlx1(Akun.username, FieldSoal, kalimat.text);
-            conn.InsertScoreFlx1(Akun.username, score, (int)accurates + " %");
-        }
-
-        else if (Collection.IsGame2)
-        {
-            Collection.IsGame2 = false;
-            conn.InsertKataFlx2(Akun.username, FieldSoal, kalimat.text);
-            conn.InsertScoreFlx2(Akun.username, score, (int)accurates + " %");
-        }
-
-        Collection.IsDone = false;
-
-        if (Collection._count >= perulangan)
-        {
-            Score.totalScore = Collection.Score;
-            SceneManager.LoadScene("Over");
+            canvasError.SetActive(true);
+            error.text = "Network Connection Unavailable";
+            Progress.text = "";
+            TxtBtnError.text = "Retry";
+            isPaused = true;
         }
         else
         {
-            SceneManager.LoadScene("PreFlexible");
-            Collection._count = Collection._count + 1;
+
+            int score = (int)Skor;
+            string Final_Kalimat = kalimat.text;
+
+            Collection.Score += score;
+
+            if (Collection.IsGame1)
+            {
+                Collection.IsGame1 = false;
+                conn.InsertFlexible(Akun.username, "Flexible N - 1 Back", tema, SOAL, Collection._count.ToString(), HURUF, Collection.Score, Final_Kalimat, FieldSoal);
+            }
+
+            else if (Collection.IsGame2)
+            {
+                Collection.IsGame2 = false;
+                conn.InsertFlexible(Akun.username, "Flexible N - 2 Back", tema, SOAL, Collection._count.ToString(),
+                HURUF, Collection.Score, Final_Kalimat, FieldSoal);
+            }
+
+            Collection.IsDone = false;
+
+            if (Collection._count >= perulangan)
+            {
+                Score.totalScore = Collection.Score;
+                SceneManager.LoadScene("Over");
+            }
+            else
+            {
+                SceneManager.LoadScene("PreFlexible");
+                Collection._count = Collection._count + 1;
+            }
         }
     }
 
@@ -934,7 +943,7 @@ public class Flexible : MonoBehaviour
         yield return new WaitForSeconds(2f);
     }
 
-    public void Test()
+    public void TestConnection()
     {
         if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork || Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {

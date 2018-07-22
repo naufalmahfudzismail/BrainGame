@@ -3,47 +3,66 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class Levels
 {
     public static int JLevel = 1;
     public static string[] kamus;
+
     public static string[] kategori;
+
+    public static string[] SoalKata;
+
+    public static void RandomList(int[] array) // random prevent repeating index
+    {
+        int arraySize = array.Length;
+        int random;
+        int temp;
+
+        for (int i = 0; i < arraySize; i++)
+        {
+            random = Random.Range(0, arraySize - 1);
+            temp = array[random];
+            array[random] = array[i];
+            array[i] = temp;
+        }
+    }
 }
 
 
 public class Anagram : MonoBehaviour
 {
     static System.Random rand = new System.Random();
-
-
+    public string[] SoalKataDasar;
+    public bool InputManualSoal = true;
     public int JumlahMaksimalHuruf = 4;
     public int JumlahLevel = 1;
     public int KesempatanMengingatHuruf = 5;
     public float WaktuMembuatKalimat = 60;
+    public int ScorePerHuruf = 100;
+    public int ScorePerSatuKata = 1000;
+    public int ScoreMembuatKalimat = 2000;
     private Connection conn;
     [HideInInspector] public GameObject Connection;
 
     private string soal;
     private string tipeSoal;
     private string choosenSoal;
-
-
+    private const string KATADASAR = "Assets/Database/katadasar.txt";
+    private const string TEMA = "Assets/Database/tema.txt";
     private int score;
     private int[] randomArray = new int[12];
+    private string[] chsoal;
     private int desiredLength;
     private bool isPlay = false;
     private bool isRemember = false;
     private bool isDone = false;
     private bool sudahlah = true;
     private bool isPaused = false;
-
-
-
-
     private float timer = 0;
     private float TimerCount = 25;
-
+    public float WaktuIngatPerChar;
 
     [HideInInspector] public GameObject canvasError;
     [HideInInspector] public GameObject canvas1;
@@ -52,12 +71,9 @@ public class Anagram : MonoBehaviour
     [HideInInspector] public GameObject TxtSentence;
     [HideInInspector] public GameObject SendButton;
     [HideInInspector] public GameObject[] TextObjects; //Tempat menampung text
-
     [HideInInspector] public Button[] BlockButton;
-
-
     [HideInInspector] public Text[] txtObj;   // Objek text nya
-     public Text Hp;
+    [HideInInspector] public Text Hp;
     [HideInInspector] public Text Result;
     [HideInInspector] public Text Clue;
     [HideInInspector] public Text countDown;
@@ -75,6 +91,7 @@ public class Anagram : MonoBehaviour
 
 
     private List<char> kar = new List<char>(); //list character pada soal yg terpilih
+    private List<string> kars = new List<string>();// list string soal
     private List<char> distract = new List<char>()
     {
         '!', '@', '#', '$', '%', '&', '?', '<', '>', '{', '}', ']', '[', '|', '/', '~', '+', '^', '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -84,12 +101,19 @@ public class Anagram : MonoBehaviour
 
     // Use this for initialization
 
-
     private void Awake()
     {
         Screen.SetResolution(600, 1024, true);
         conn = Connection.GetComponent<Connection>();
         canvasError.SetActive(false);
+    }
+
+    private string[] getDatafromFile(string path)
+    {
+        StreamReader reader = new StreamReader(path);
+        string data = reader.ReadLine();
+        string[] datas = data.Split('|');
+        return datas;
     }
 
     private IEnumerator ShowProgress(WWW www)
@@ -121,39 +145,48 @@ public class Anagram : MonoBehaviour
     }
 
 
-    IEnumerator Start()
+    void Start()
     {
 
         if (Levels.JLevel == 1)
         {
-            WWW items = new WWW(conn.getUrlKataDasar());
-            WWW itemsTheme = new WWW(conn.getUrlKategori());
+            if (!InputManualSoal)
+            {
+                Levels.kamus = getDatafromFile(KATADASAR);
+                print(Levels.kamus.Length);
+            }
 
-            StartCoroutine(ShowProgress(items));
+            else
+            {
+                List<string> strlist = new List<string>();
+                int[] IndexKata = new int[SoalKataDasar.Length];
+                for (int i = 0; i < SoalKataDasar.Length; i++)
+                {
+                    IndexKata[i] = i;
+                }
+                Levels.RandomList(IndexKata);
+                for (int i = 0; i < SoalKataDasar.Length; i++)
+                {
+                    print(IndexKata[i]);
+                    strlist.Add(SoalKataDasar[IndexKata[i]]);
+                }
 
-            yield return items;
-            yield return itemsTheme;
+                Levels.kamus = strlist.ToArray();
+    
+                foreach (string c in Levels.kamus)
+                {
+                    print(c);
+                }
+            }
 
-
-
-            string itemsString = items.text;
-            string itemsThemeString = itemsTheme.text;
-
-            Levels.kamus = itemsString.Split('|');
-            Levels.kategori = itemsThemeString.Split('|');
-            print(Levels.kamus.Length);
         }
-
-
         CloseButton();
-        GetSoal(Levels.kamus, Levels.kategori);
-        StartCoroutine("TextinObject");
+        GetSoal(Levels.kamus);
 
+        StartCoroutine("TextinObject");
 
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (isPaused)
@@ -165,20 +198,20 @@ public class Anagram : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        if (Application.internetReachability == NetworkReachability.NotReachable)
+        /*if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             canvasError.SetActive(true);
             error.text = "Network Connection Unavailable";
             Progress.text = "";
             TxtBtnError.text = "Retry";
             isPaused = true;
-        }
-        
-            Timer();
-            Round.text = "Round : " + Levels.JLevel;
-            lifecount.text = "Chance : " + KesempatanMengingatHuruf.ToString();
-            ScoreWhile.text = "Score sementara :" + score;
-        
+        }*/
+
+        Timer();
+        Round.text = "Round : " + Levels.JLevel;
+        lifecount.text = "Chance : " + KesempatanMengingatHuruf.ToString();
+        ScoreWhile.text = "Score sementara :" + score;
+
         if (isRemember)
         {
             OpenButton();
@@ -199,39 +232,52 @@ public class Anagram : MonoBehaviour
         {
 
             Timer2();
-            string[] dummy = new string[choosen.Count];
-
-            for (int d = 0; d < choosen.Count; d++)
-            {
-                dummy[d] = choosen[d];
-            }
 
             canvas1.SetActive(false);
             canvas2.SetActive(true);
 
-            choosenSoal = string.Join(",", dummy);
+            choosenSoal = string.Join(",", chsoal);
             ChoosenString.text = "Susunlah huruf " + choosenSoal + " menjadi sebuah kata !";
-            Clue.text = tipeSoal.ToString();
+            Clue.text = "Good Luck";
         }
 
         if (KesempatanMengingatHuruf == 0)
         {
-
-            conn.InsertScoreAna(Akun.username, score);
+            /*conn.InsertAnagram(Akun.username, Levels.JLevel.ToString(), choosenSoal, score, "^Gagal dalam menebak huruf^", soal);
             Score.totalScore = score;
-            SceneManager.LoadScene("Over");
+            SceneManager.LoadScene("Over");*/
+            isDone = true;
+            isPlay = false;
+            isRemember = false;
         }
 
     }
-
-
-
     void CloseButton()
     {
         for (int b = 0; b < BlockButton.Length; b++)
         {
             BlockButton[b].interactable = false;
         }
+    }
+
+    private string[] shuffleChar(string[] array)
+    {
+        int Length = array.Length;
+        int[] index = new int[Length];
+        string[] shuffleChar = new string[Length];
+
+        for (int i = 0; i < Length; i++)
+        {
+            index[i] = i;
+        }
+        Levels.RandomList(index);
+
+        for (int i = 0; i < Length; i++)
+        {
+            shuffleChar[i] = array[index[i]];
+        }
+
+        return shuffleChar;
     }
 
     void OpenButton()
@@ -246,52 +292,41 @@ public class Anagram : MonoBehaviour
 
     }
 
-
-    static void RandomList(int[] array) // random prevent repeating index
+    private string GetSoal(string[] soalRand)
     {
-        int arraySize = array.Length;
-        int random;
-        int temp;
-
-        for (int i = 0; i < arraySize; i++)
+        if (!InputManualSoal)
         {
+            int count = soalRand.Length;
+            int random = Random.Range(0, count);
+            string Soalrandom = soalRand[random];
 
-            random = i + (int)(rand.NextDouble() * (arraySize - i));
-            temp = array[random];
-            array[random] = array[i];
-            array[i] = temp;
-        }
-    }
+            while (Soalrandom.Length > JumlahMaksimalHuruf + 1)
+            {
+
+                random = Random.Range(0, count);
+                Soalrandom = soalRand[random];
+            }
+
+            soal = (string)Soalrandom;
+
+            soal = soal.ToUpper();
+
+            print(soal);
 
 
-    private string GetSoal(string[] soalRand, string[] tipe)
-    {
-        int count = soalRand.Length;
-        int random = Random.Range(0, count);
-
-        string Soalrandom = soalRand[random];
-        string Tipe = tipe[random];
-
-
-        while (Soalrandom.Length > JumlahMaksimalHuruf + 1)
-        {
-
-            random = Random.Range(0, count);
-            Soalrandom = soalRand[random];
-            Tipe = Levels.kategori[random];
         }
 
-        soal = (string)Soalrandom;
-        tipeSoal = (string)Tipe;
+        else
+        {
+            int i = Levels.JLevel;
+            soal = Levels.kamus[i -1];
+            soal = soal.ToUpper();
+            print(soal);
 
-        soal = soal.ToUpper();
-
-        print(soal);
+        }
 
         return soal;
     }
-
-
 
     private void Split()// split string soal into char, and store it to list
     {
@@ -299,7 +334,10 @@ public class Anagram : MonoBehaviour
         foreach (char c in soal)
         {
             kar.Add(c);
+            kars.Add(c.ToString());
         }
+
+        chsoal = shuffleChar(kars.ToArray());
     }
 
     private void Distraction() // add desired distraction
@@ -318,6 +356,7 @@ public class Anagram : MonoBehaviour
     {
 
         Distraction();
+        TimerCount = 12 * WaktuIngatPerChar;
 
         int limit = kar.Count;
 
@@ -347,13 +386,14 @@ public class Anagram : MonoBehaviour
             StockRand[i] = i;
         }
 
-        RandomList(randomArray);
-        RandomList(StockRand);
+        Levels.RandomList(randomArray);
+        Levels.RandomList(StockRand);
 
         for (int i = 0; i < txtObj.Length; i++)
         {
             txtObj[randomArray[i]].text = Stock[StockRand[i]].ToString();
-            yield return new WaitForSeconds(2);
+            print(txtObj[randomArray[i]].text);
+            yield return new WaitForSeconds(WaktuIngatPerChar);
             TextObjects[randomArray[i]].SetActive(false);
         }
 
@@ -370,7 +410,7 @@ public class Anagram : MonoBehaviour
 
     private void Timer() //time to remember
     {
-        
+
         timer += Time.deltaTime;
         if (timer > 1f)
         {
@@ -397,30 +437,28 @@ public class Anagram : MonoBehaviour
 
     public void Timer2()
     {
-       
-         timer += Time.deltaTime;
+
+        timer += Time.deltaTime;
         if (timer > 1f)
         {
             timer = 0;
 
             if (WaktuMembuatKalimat > 0)
             {
-                WaktuMembuatKalimat --;
-                string minutes = Mathf.Floor(WaktuMembuatKalimat  / 60).ToString("00");
-                string seconds = Mathf.Floor(WaktuMembuatKalimat  % 60).ToString("00");
+                WaktuMembuatKalimat--;
+                string minutes = Mathf.Floor(WaktuMembuatKalimat / 60).ToString("00");
+                string seconds = Mathf.Floor(WaktuMembuatKalimat % 60).ToString("00");
                 Hp.text = "Timer     " + minutes + ":" + seconds;
             }
 
-            if ( WaktuMembuatKalimat  == 0)
+            if (WaktuMembuatKalimat == 0)
             {
                 Score.totalScore = score;
-                conn.InsertKataAna(Akun.username, soal, txtSentences.text);
-                conn.InsertScoreAna(Akun.username, score);
+                conn.InsertAnagram(Akun.username, Levels.JLevel.ToString(), choosenSoal, score, "Gagal dalam game ini", soal);
                 SceneManager.LoadScene("Over");
             }
         }
     }
-
 
     public void CheckJawaban()  // check answer
     {
@@ -433,14 +471,14 @@ public class Anagram : MonoBehaviour
             if (Jawaban == Soal)
             {
                 Result.text = "Selamat, Jawaban anda benar!";
-                score = score + 1000;
+                score = score + ScorePerSatuKata;
                 TxtSentence.SetActive(true);
                 SendButton.SetActive(true);
             }
             else
             {
                 Result.text = "Maaf, Jawaban anda Salah!";
-              
+
             }
         }
     }
@@ -455,37 +493,27 @@ public class Anagram : MonoBehaviour
     {   //This method actually working
         txtSentences.text = txtSentences.text.ToUpper();
         string kalimat = txtSentences.text;
-        if (kalimat.Contains(soal))
+
+        txtSentences.readOnly = true;
+
+        if (Levels.JLevel == JumlahLevel)
         {
-            txtSentences.readOnly = true;
-
-            if (Levels.JLevel == JumlahLevel)
-            {
-                score = score + 2000;
-                conn.InsertKataAna(Akun.username, soal, kalimat);
-                conn.InsertScoreAna(Akun.username, score);
-                Score.totalScore = score;
-                SceneManager.LoadScene("Over");
-                print("Posted");
-            }
-
-            else
-            {
-                score = score + 2000;
-                conn.InsertKataAna(Akun.username, soal, kalimat);
-                conn.InsertScoreAna(Akun.username, score);
-                Levels.JLevel++;
-                TimerCount = 25;
-                SceneManager.LoadScene("Anagram");
-            }
-
-
+            score = score + ScoreMembuatKalimat;
+            conn.InsertAnagram(Akun.username, Levels.JLevel.ToString(), choosenSoal, score, kalimat, soal);
+            Score.totalScore = score;
+            SceneManager.LoadScene("Over");
+            print("Posted");
         }
 
         else
         {
-            StartCoroutine("Btnply");
+            score = score + ScoreMembuatKalimat;
+            conn.InsertAnagram(Akun.username, Levels.JLevel.ToString(), choosenSoal, score, kalimat, soal);
+            Levels.JLevel++;
+            TimerCount = 12 * WaktuIngatPerChar;
+            SceneManager.LoadScene("Anagram");
         }
+
     }
 
     IEnumerator Btnply()
@@ -512,7 +540,6 @@ public class Anagram : MonoBehaviour
     }
 
     //button function 
-
     public void Btn1()
     {
         bool isThat = false;
@@ -530,7 +557,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[0].SetActive(true);
             choosen.Add(txtObj[0].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[0].interactable = false;
         }
 
@@ -560,7 +587,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[1].SetActive(true);
             choosen.Add(txtObj[1].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[1].interactable = false;
         }
 
@@ -590,7 +617,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[2].SetActive(true);
             choosen.Add(txtObj[2].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[2].interactable = false;
         }
 
@@ -619,7 +646,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[3].SetActive(true);
             choosen.Add(txtObj[3].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[3].interactable = false;
         }
 
@@ -649,7 +676,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[4].SetActive(true);
             choosen.Add(txtObj[4].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[4].interactable = false;
         }
 
@@ -679,7 +706,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[5].SetActive(true);
             choosen.Add(txtObj[5].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[5].interactable = false;
         }
 
@@ -709,7 +736,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[6].SetActive(true);
             choosen.Add(txtObj[6].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[6].interactable = false;
         }
 
@@ -739,7 +766,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[7].SetActive(true);
             choosen.Add(txtObj[7].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[7].interactable = false;
         }
 
@@ -769,7 +796,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[8].SetActive(true);
             choosen.Add(txtObj[8].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[8].interactable = false;
         }
 
@@ -799,7 +826,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[9].SetActive(true);
             choosen.Add(txtObj[9].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[9].interactable = false;
         }
 
@@ -829,7 +856,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[10].SetActive(true);
             choosen.Add(txtObj[10].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[10].interactable = false;
         }
 
@@ -858,7 +885,7 @@ public class Anagram : MonoBehaviour
         {
             TextObjects[11].SetActive(true);
             choosen.Add(txtObj[11].text);
-            score = score + 100;
+            score = score + ScorePerHuruf;
             BlockButton[11].interactable = false;
         }
 

@@ -2921,7 +2921,7 @@ Prefab:
     - target: {fileID: 224355429356590728, guid: 40770662e39e0424488a65194ab6089e,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1289192781004946, guid: 40770662e39e0424488a65194ab6089e, type: 2}
       propertyPath: m_Name
@@ -4547,11 +4547,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661f61fbdce4abd4d9012cc51f8a9fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SoalKataDasar:
+  - budi
+  - kampang
+  - duduk
+  - beda
+  - sus
+  InputManualSoal: 1
   JumlahMaksimalHuruf: 4
   JumlahLevel: 2
-  KesempatanMengingatHuruf: 2
+  KesempatanMengingatHuruf: 10
   WaktuMembuatKalimat: 60
+  ScorePerHuruf: 100
+  ScorePerSatuKata: 1000
+  ScoreMembuatKalimat: 2000
   Connection: {fileID: 2001398569}
+  WaktuIngatPerChar: 1
   canvasError: {fileID: 629573328}
   canvas1: {fileID: 1451636280}
   canvas2: {fileID: 251432692}
