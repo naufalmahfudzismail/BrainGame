@@ -4496,7 +4496,7 @@ Prefab:
     - target: {fileID: 114796466221629292, guid: 3240c6e563e20aa46bfcb82c25f13d9c,
         type: 2}
       propertyPath: JumlahCharacter
-      value: 6
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 114796466221629292, guid: 3240c6e563e20aa46bfcb82c25f13d9c,
         type: 2}
@@ -4596,6 +4596,16 @@ Prefab:
         type: 2}
       propertyPath: ListKategori.Array.data[2]
       value: Benda
+      objectReference: {fileID: 0}
+    - target: {fileID: 114796466221629292, guid: 3240c6e563e20aa46bfcb82c25f13d9c,
+        type: 2}
+      propertyPath: ScoreMembuatKata
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114796466221629292, guid: 3240c6e563e20aa46bfcb82c25f13d9c,
+        type: 2}
+      propertyPath: ScoreMembuatKalimat
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3240c6e563e20aa46bfcb82c25f13d9c, type: 2}
@@ -7556,11 +7566,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connection: {fileID: 1587974102}
-  JumlahCharacter: 6
+  JumlahCharacter: 40
   WaktuPerStep: 2
   perulangan: 1
   ScorePerAkurasi: 10
   PenguranganScoreSalah: 2
+  ScoreMembuatKata: 200
+  ScoreMembuatKalimat: 500
   ListKategori:
   - Hewan
   - Tumbuhan
@@ -7627,7 +7639,7 @@ MonoBehaviour:
   Wrong: {fileID: 282624331}
   TxtBtnError: {fileID: 794437358}
   countDown: {fileID: 1768924906}
-  WaktuTebak: 60
+  WaktuMembuatKataDanKalimat: 60
 --- !u!4 &2100279076
 Transform:
   m_ObjectHideFlags: 0
